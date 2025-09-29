@@ -5,15 +5,15 @@ const createPayment = async(req, res) => {
     const {customerName, amount, currency, provider} = req.body //collect input from frontend form
 
     if (!customerName || !amount || !currency || !provider) { //check for nulls in payment fields and double check a user is logged in
-        res.status(400).json({message: "Please ensure all required fields are filled out"})
+        return res.status(400).json({message: "Please ensure all required fields are filled out"})
     }
 
     try {
         const payment = await Payment.create({customerName, amount, currency, provider, verified: false}) //create the payment object 
-        res.status(201).json(payment) //returnt that the object was created and logged in db
+        return res.status(201).json(payment) //returnt that the object was created and logged in db
     }
     catch (error) {
-        res.status(500).json({error: error.message}) //if soemthing goes wrong, return eror details
+        return res.status(500).json({error: error.message}) //if soemthing goes wrong, return eror details
     }
 }
 
@@ -26,10 +26,10 @@ const verifyPayment = async(req, res) => {
         const payment = await Payment.findByIdAndUpdate(id, {verified}, {new: true}) //find the payment from the db and update where verified field updates
 
         if (!payment) { //payment not found
-            res.status(404).json({message: "There is no payment here"})
+            return res.status(404).json({message: "There is no payment here"})
         }
         
-        res.status(202).json(payment) //return the updated book
+        return res.status(202).json(payment) //return the updated book
     }
     catch (error) {
         res.status(500).json({error: error.message}) //if anythign goes wrong, return eror detauls
@@ -40,10 +40,10 @@ const verifyPayment = async(req, res) => {
 const getPendingPayments = async(req, res) => {
     try {
         const payments = await Payment.find({verified: false}) //pulls all objects in payment node in db
-        res.status(200).json(payments)
+        return res.status(200).json(payments)
     }
     catch (error) {
-        res.status(500).json({error: error.message})
+        return res.status(500).json({error: error.message})
     }
 }
 

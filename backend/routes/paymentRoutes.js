@@ -1,5 +1,4 @@
 const express = require('express') //import express to use methods and functionality
-const {findOneAndReplace} = require('../models/paymentModel.js')
 
 const {createPayment, verifyPayment, getPendingPayments} = require('../controllers/paymentController.js') //call in necessary methods from controller
 
