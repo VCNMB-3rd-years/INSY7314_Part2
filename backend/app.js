@@ -3,10 +3,13 @@ require('dotenv').config()
 const port = process.env.API_PORT || 3002 //default value passed if env file doesnt render
 const {connectToMongo} = require('./services/dbService.js') //to connect to db
 const paymentRoutes = require('./routes/paymentRoutes.js')
+const {securityMiddleware} = require('./middleware/securityMiddleware.js')
 
 const app = express() //runs express with default parameters
 
 app.use(express.json()) //interpret json communication throughout
+
+securityMiddleware(app) //wrap app in security middleware
 
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`) //print method requests and url
