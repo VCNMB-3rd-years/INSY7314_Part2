@@ -6,6 +6,36 @@ const employeeSchema = new mongoose.Schema({ //define layout of an employee obje
     password: {type: String, required: true}
 })
 
+
+//(Kumar, 2024) Hashing user's password before entering mongoose
+employeeSchema.pre('save', async function(next) {
+    //Hashes if password is new or has been updated
+    if(!this.isModified('password'))
+    {
+        return next();
+    }
+    
+    try{
+        //Now SALT and HASH is generated
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        //go forward to save
+        next();
+    }
+    catch(error)
+    {
+        //Passes error 
+        next(error);
+    } 
+})
+
+//Comparison of the login password with hashed password (Bhupendra, 2024)
+employeeSchema.methods.matchPassword = async function(enterPassword)
+{
+     return await bcrypt.compare(enterPassword, this.password);
+}
+
+
 const Employee = mongoose.model('Employee', employeeSchema) //link employee layout ot db
 
 module.exports = Employee //rest of app gains access to this export

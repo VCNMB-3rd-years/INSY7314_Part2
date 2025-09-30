@@ -32,13 +32,10 @@ customerSchema.pre('save', async function(next) {
 })
 
 //Comparison of the login password with hashed password (Bhupendra, 2024)
-
 customerSchema.methods.matchPassword = async function(enterPassword)
 {
      return await bcrypt.compare(enterPassword, this.userPassword);
 }
-
-
 
 const Customer = mongoose.model('Customer', customerSchema) //link customer layout ot db
 

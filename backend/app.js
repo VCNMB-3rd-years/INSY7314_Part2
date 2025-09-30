@@ -5,6 +5,9 @@ const {connectToMongo} = require('./services/dbService.js') //to connect to db
 const paymentRoutes = require('./routes/paymentRoutes.js')
 const {securityMiddleware} = require('./middleware/securityMiddleware.js')
 
+const customerRoutes = require('./routes/customerRoutes.js')
+const employeeRoutes = require('./routes/employeeRoutes.js')
+
 const app = express() //runs express with default parameters
 
 app.use(express.json()) //interpret json communication throughout
@@ -17,7 +20,8 @@ app.use((req, res, next) => {
 })
 
 app.use('/v1/payments', paymentRoutes) //version the api and call in functionality from payment routes
-
+app.use('/v1/customer', customerRoutes)
+app.use('/v1/employee', employeeRoutes)
 connectToMongo() //connect to db
 
 app.listen(port, () => {

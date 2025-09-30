@@ -15,7 +15,7 @@ const register = async (req, res) => {
     } = req.body
 
     //Error handeling > make sure that user enters all the information in the input boxs/fields stuff
-        if(){
+        if(!fullName||!idNumber||!accNumber||!userPassword){
             return res.status(400).json({message: "Enter all the fields please"})
         }
 
