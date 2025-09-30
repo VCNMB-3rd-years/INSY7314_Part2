@@ -1,3 +1,4 @@
 import axios from '../interfaces/axiosInstance.js' //call in axios interface
 
 export const getPendingPayments = () => axios.get('/payments')
+export const createPayment = (payment) => axios.post('/payments/', payment)
