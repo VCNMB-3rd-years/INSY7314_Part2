@@ -8,3 +8,5 @@ const {registerEmployee} = require('../controllers/employeeController.js')
 router.post('/registerEmployee', registerEmployee) //Registers the Employee
 
 module.exports = router
+
+//Added a comment
