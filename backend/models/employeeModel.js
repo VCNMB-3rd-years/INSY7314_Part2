@@ -1,9 +1,9 @@
-//
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose')
 
 const employeeSchema = new mongoose.Schema({ //define layout of an employee object
     username: {type: String, required: true},
-    password: {type: String, required: true}
+    password: {type: String, required: true, select: false} //prevents password to be seen (Stack Overflow, 2012)
 })
 
 
@@ -36,6 +36,6 @@ employeeSchema.methods.matchPassword = async function(enterPassword)
 }
 
 
-const Employee = mongoose.model('Employee', employeeSchema) //link employee layout ot db
+//const Employee = mongoose.model('Employee', employeeSchema) //link employee layout ot db
 
-module.exports = Employee //rest of app gains access to this export
+module.exports = mongoose.model('Employee', employeeSchema); //rest of app gains access to this export

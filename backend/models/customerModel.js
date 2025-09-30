@@ -6,13 +6,14 @@ const customerSchema = new mongoose.Schema({ //define layout of a customer objec
     fullName: {type: String, required: true},
     idNumber: {type: String, required: true},
     accNumber: {type: String, required: true},
-    userPassword: {type: String, required: true}
+    userPassword: {type: String, required: true, select: false} //prevents password to be seen (Stack Overflow, 2012)
 })
 
 //(Kumar, 2024) Hashing user's password before entering mongoose
 customerSchema.pre('save', async function(next) {
     //Hashes if password is new or has been updated
     if(!this.isModified('userPassword'))
+
     {
         return next();
     }
@@ -52,4 +53,5 @@ REFERENCES
 ==================
 Bhupendra, 2024. Password Hashing using bcrypt. [Online] Available at: https://medium.com/@bhupendra_Maurya/password-hashing-using-bcrypt-e36f5c655e09 [Accessed 30 September 2025]
 Kumar, A. 2024. Mastering User Authentication: Building a Secure User Schema with Mongoose and Bcrypt. [Online] Available at: https://medium.com/@finnkumar6/mastering-user-authentication-building-a-secure-user-schema-with-mongoose-and-bcrypt-539b9394e5d9 [Accessed 30 September 2025]
+Stack Overflow. 2012. How to protect the password field in Mongoose/MongoDB so it won't return in a query when I populate collections? [Online] Available at:  https://stackoverflow.com/questions/12096262/how-to-protect-the-password-field-in-mongoose-mongodb-so-it-wont-return-in-a-qu [Accessed 30 September 2025]
 */

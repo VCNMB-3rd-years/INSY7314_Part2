@@ -1,12 +1,12 @@
 const customer = require('../models/customerModel.js')
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 
 
 //Registration of a Customer 
 const register = async (req, res) => {
     //Information needed for registration
-
+    try{
     const {
         fullName,
         idNumber,
@@ -20,23 +20,26 @@ const register = async (req, res) => {
         }
 
      //Checks if customer exists
-     const checksIfCustomerExists = await customer.findOne({idNumber})   
+     const checksIfCustomerExists = await customer.findOne({idNumber}, {accNumber})   
         if(checksIfCustomerExists)
         {
             return res.status(400).json({message: "Customer already exists."});
         }
 
-    
-    try{
-
         //Create a new Customer
-        const Customer = await customer.create(
+        const createdCustomer = await customer.create(
             {
             fullName,
             idNumber,
             accNumber,
             userPassword
             })
+
+            // (Gyawali, 2024)
+            const safe = createdCustomer.toObject ? createdCustomer.toObject() : createdCustomer;
+            delete safe.userPassword;
+    
+             return res.status(201).json({ message: "Customer registered", employee: safe });
 
     }
     catch(error)
@@ -51,3 +54,9 @@ const login = async (req, res) => {}
 module.exports = {
     register
 }
+
+/*
+    REFERENCES
+    =====================
+    Gyawali, B. 2024. Hiding Credentials in Response with Mongoose and Nodejs. [Online]. Available at: https://medium.com/@vikramgyawali57/hiding-credentials-in-response-with-mongoose-and-nodejs-a5d591b373e6 [Accessed 30 September 2025]
+*/

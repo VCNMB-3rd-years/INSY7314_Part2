@@ -1,9 +1,10 @@
 const Employee = require('../models/employeeModel.js')
 const bcrypt = require('bcryptjs');
 
-//Registration of a Customer 
+//Registration of a Customer (post)
 const registerEmployee = async (req, res) => {
     //Information needed for registration
+try{
 
     const {
         username,
@@ -23,14 +24,19 @@ const registerEmployee = async (req, res) => {
         }
 
     
-    try{
-
+    
         //Create a new Customer
-        const Employee = await Employee.create(
+        const createdEmployee = await Employee.create(
             {
             username,
             password
             })
+
+              const safe = createdEmployee.toObject ? createdEmployee.toObject() : createdEmployee;
+    delete safe.password;
+
+            return res.status(201).json({ message: "Employee registered", employee: safe });
+ 
 
     }
     catch(error)
