@@ -1,8 +1,6 @@
 const customer = require('../models/customerModel.js')
 const bcrypt = require('bcryptjs');
 
-
-
 //Registration of a Customer 
 const register = async (req, res) => {
     //Information needed for registration

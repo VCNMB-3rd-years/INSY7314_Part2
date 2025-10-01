@@ -13,7 +13,6 @@ const customerSchema = new mongoose.Schema({ //define layout of a customer objec
 customerSchema.pre('save', async function(next) {
     //Hashes if password is new or has been updated
     if(!this.isModified('userPassword'))
-
     {
         return next();
     }
