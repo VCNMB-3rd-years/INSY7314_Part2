@@ -47,7 +47,7 @@ then it runs our the express app, in the chosen port and where to print it out
 -- npm i https
 */
 
-https.createServer(options, app).listen(443, () => {
+https.createServer(options, app).listen(port, () => {
     console.log(`The API is now SECURLEY LISTENING on port ${port}.`)
 })
 
