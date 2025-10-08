@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import PaymentPortal from './pages/paymentPortal.jsx'
 import CreatePayment from './pages/makePayment.jsx'
 import RegisterCustomer from './pages/registerCustomer.jsx'
+import Login from './pages/login.jsx'
+
 
 function App() {
   return (
@@ -10,6 +12,7 @@ function App() {
         <Route path="/paymentPortal" element={<PaymentPortal />} />
         <Route path="/makePayment" element={<CreatePayment />} />
         <Route path="/register" element={<RegisterCustomer />} />
+        <Route path="/login" element={<Login />} />
       </Routes>   
     </Router>
   )

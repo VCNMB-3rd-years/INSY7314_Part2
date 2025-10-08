@@ -46,7 +46,8 @@ const registerEmployee = async (req, res) => {
 //Login of a Employee 
 const loginEmployee = async (req, res) => {
     try {
-        const { username,
+        const { 
+            username,
             password
         } = req.body
 
