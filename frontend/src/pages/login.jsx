@@ -80,14 +80,7 @@ export default function Login() {
             required
           />
           <br />
-          <input
-            type="text"
-            name="accNumber"
-            placeholder="Account Number (customers only)"
-            value={formData.accNumber}
-            onChange={handleInputChange}
-          />
-          <br />
+          
           <input
             type="password"
             name="password"
@@ -97,8 +90,16 @@ export default function Login() {
             required
           />
           <br />
-          <button type="reset" onClick={handleReset}>Reset</button>
+          <input
+            type="text"
+            name="accNumber"
+            placeholder="Account Number (customers only)"
+            value={formData.accNumber}
+            onChange={handleInputChange}
+          />
+          <br />
           <button type="submit">Submit</button>
+          <button type="reset" onClick={handleReset}>Reset</button>          
         </form>
       </div>
     </div>
