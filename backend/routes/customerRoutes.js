@@ -1,12 +1,13 @@
 const express = require('express')
 
-const {register} = require('../controllers/customerController.js')
+const {register, login } = require('../controllers/customerController.js')
 
 const router = express.Router()
 
 //API endpoints
 router.post('/register', register) //Registers the Customer
 
+router.post('/login', login); // Logs the customer in
 
 //Testing puposes:
 
