@@ -3,10 +3,10 @@ import '../App.css'
 import { useNavigate } from 'react-router-dom'
 
 export default function WelcomePage() {
-    const navigate = useNavigate()
+    const navigate = useNavigate() //(Gavaudn, 2022)
 
     const handleNavigateToPayPortal = () => {
-        navigate('/paymentPortal')
+        navigate('/makePayment')
     }
 
     return(
