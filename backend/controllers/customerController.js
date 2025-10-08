@@ -59,7 +59,7 @@ const login = async (req, res) => {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // using matchPassword to the one in the db
+        // using matchPassword to mathc password to the one in the db
         const isMatch = await customerData.matchPassword(userPassword);
         if (!isMatch) {
             return res.status(401).json({ message: "Invalid credentials" });
