@@ -29,7 +29,7 @@ const verifyPayment = async(req, res) => {
             return res.status(404).json({message: "There is no payment here"})
         }
         
-        return res.status(202).json(payment) //return the updated book
+        return res.status(202).json(payment) //return the updated payment
     }
     catch (error) {
         res.status(500).json({error: error.message}) //if anythign goes wrong, return eror detauls

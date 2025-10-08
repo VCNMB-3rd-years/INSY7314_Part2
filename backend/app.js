@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 app.use('/v1/payments', paymentRoutes) //version the api and call in functionality from payment routes
 app.use('/v1/customer', customerRoutes)
 app.use('/v1/employee', employeeRoutes)
-//connectToMongo() //connect to db
+connectToMongo() //connect to db
 
 //COMMNETED OUT FOR THE SSL CERTIFICATE
 //app.listen(port, () => {
