@@ -97,8 +97,8 @@ export default function Login() {
             required
           />
           <br />
-          <button type="submit">Submit</button>
           <button type="reset" onClick={handleReset}>Reset</button>
+          <button type="submit">Submit</button>
         </form>
       </div>
     </div>
