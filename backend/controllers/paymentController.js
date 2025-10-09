@@ -7,7 +7,7 @@ const createPayment = async(req, res) => {
     const {customerName, customerAcc, amount, currency, provider, swiftCode} = req.body //collect input from frontend form
 
     //ensure someone is logged in when they naviagte to the payment page
-    if (!req.user || !req.user.fullName || !req.user.accNumber) {
+    if (!req.user || !req.user.payload.fullName || !req.user.payload.accNumber) {
         return res.status(401).json({message: "You muts be logged in to make a payment"}) //401 forbidden if not logged in
     }
 
@@ -50,7 +50,7 @@ const createPayment = async(req, res) => {
         return res.status(400).json({ message: "Provider must only contain letters, numbers, and spaces" });
     }
 
-    if (req.user.fullName !== sanitizedName || req.user.accNumber !== sanitizedAccNumber) {
+    if (req.user.payload.fullName !== sanitizedName || req.user.payload.accNumber !== sanitizedAccNumber) {
         return res.status(403).json({message: "Customer details don't match logged in user credentials" })
     }
 

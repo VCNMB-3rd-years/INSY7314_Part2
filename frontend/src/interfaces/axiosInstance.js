@@ -1,7 +1,7 @@
 import axios from 'axios' //imports axios to connect to api
 import { useAuth } from '../context/authContext'
 
-const axiosInstance = axios.create({
+export const api = axios.create({
     baseURL: 'https://localhost:3003/v1',
     headers: {
         'Content-Type': 'application/json'
@@ -10,10 +10,10 @@ const axiosInstance = axios.create({
 
 export const setAuthToken = (token) => {
     if (token) {
-        axiosInstance.defaults.headers.Authorization = `Bearer ${token}`; //passes token through authorization header to api call
+        api.defaults.headers.common[`Authorization`] = `Bearer ${token}`; //passes token through authorization header to api call
     } else {
-        delete axiosInstance.defaults.headers.Authorization;
+        delete api.defaults.headers.common[`Authorization`];
     }
 };
 
-export default axiosInstance
+export default api
