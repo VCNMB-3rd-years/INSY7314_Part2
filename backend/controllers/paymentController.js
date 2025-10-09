@@ -4,14 +4,14 @@ const Payment = require('../models/paymentModel.js') //connect model to controll
 
 //CREATE PAYMENT (post)
 const createPayment = async(req, res) => {
-    const {customerName, amount, currency, provider} = req.body //collect input from frontend form
+    const {customerName, customerAcc, amount, currency, provider, swiftCode} = req.body //collect input from frontend form
 
     //ensure someone is logged in when they naviagte to the payment page
-    if (!req.user) {
+    if (!req.user || !req.user.fullName || !req.user.accNumber) {
         return res.status(401).json({message: "You muts be logged in to make a payment"}) //401 forbidden if not logged in
     }
 
-    if (!customerName || !amount || !currency || !provider) { //check for nulls in payment fields and double check a user is logged in
+    if (!customerName || !customerAcc || !amount || !currency || !provider || !swiftCode) { //check for nulls in payment fields and double check a user is logged in
         return res.status(400).json({message: "Please ensure all required fields are filled out"})
     }
 
@@ -19,6 +19,8 @@ const createPayment = async(req, res) => {
     const sanitizedAmount = parseFloat(amount)
     const sanitizedProvider = xss(validator.escape(provider?.toString() || ''))
     const sanitizedCurrency = xss(validator.escape(currency?.toString() || ''))
+    const sanitizedSwiftCode = xss(validator.escape(swiftCode?.toString() || ''))
+    const sanitizedAccNumber = xss(validator.escape(customerAcc?.toString() || ''))
 
     //sanitize user entered date (customer info)
     if (!validator.matches(sanitizedName, /^[a-zA-Z0-9\s]+$/)) {
@@ -39,7 +41,12 @@ const createPayment = async(req, res) => {
     if (!validator.matches(sanitizedCurrency, /^[A-Z]{3}$/)) {
         return res.status(400).json({ message: "Currency should be the 3 initials of the currency name" });
     }
+
     if (!validator.matches(sanitizedProvider, /^[a-zA-Z0-9\s]+$/)) {
+        return res.status(400).json({ message: "Provider must only contain letters, numbers, and spaces" });
+    }
+
+    if (!validator.matches(sanitizedSwiftCode, /^([a-zA-Z]{4})[-\s]?([a-zA-Z]{2})[-\s]?([0-9a-zA-Z]{2})([-\s]?[0-9a-zA-Z]{3})?$/)) { //(Klesun, 2024)
         return res.status(400).json({ message: "Provider must only contain letters, numbers, and spaces" });
     }
 
@@ -102,3 +109,9 @@ module.exports = {
     verifyPayment,
     getPendingPayments
 }
+
+/*
+REFERENCES:
+    Klesun. 28 June 2024. What is proper RegEx expression for SWIFT codes? [Online]. Available at: <https://stackoverflow.com/questions/3028150/what-is-proper-regex-expression-for-swift-codes> [Accessed 9 October 2025]
+    W3Schools. 2025. RegExp Character Classes. [online]  available at: https://www.w3schools.com/js/js_regexp_characters.asp date accessed date 09 October 2025
+*/
