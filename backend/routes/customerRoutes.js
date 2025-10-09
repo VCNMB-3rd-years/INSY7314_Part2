@@ -4,43 +4,41 @@ const ExpressBrute = require('express-brute');
 const {register, login } = require('../controllers/customerController.js')
 
 
+const store = new ExpressBrute.MemoryStore(); 
 
 //There are two ways of brute attack 1. user and then 2.per IP 
 
 //User brute attack (the user shouldnt login wrong more than 5 times) 
-const failCall = function ( req, res, next, nextValidRequestData) {
+const failCallback = function ( req, res, next, nextValidRequestData) {
   res.status(429).json({message: "Sorry, you have made too many attempts. Try again laters"})
 
 }
 
 //Normal error handeling
 var handleStoreError = function (error) {
-	log.error(error); 
-  	throw {
-		message: error.message,
-		parent: error.parent
+	console.error(error)
 	};
-}
+
 
 
 //USER BRUTE FORCE 
-var userBruteforce = new ExpressBrute({
+var userBruteforce = new ExpressBrute( store,{
 	freeRetries: 5,
 	minWait: 5*60*1000, // 5 minutes
 	maxWait: 60*60*1000, // 1 hour,
-	failCall: failCall,
+	failCallback: failCallback,
 	handleStoreError: handleStoreError
 });
 
 //IP Brute FORCE 
-var globalBruteforce = new ExpressBrute({
+var globalBruteforce = new ExpressBrute( store,{
 	freeRetries: 1000,
 	attachResetToRequest: false,
 	refreshTimeoutOnRequest: false,
 	minWait: 25*60*60*1000, // 1 day 1 hour 
 	maxWait: 25*60*60*1000, // 1 day 1 hour 
 	lifetime: 24*60*60, // 1 day (seconds not milliseconds)
-	failCall: failCall,
+	failCallback: failCallback,
 	handleStoreError: handleStoreError
 });
 
@@ -54,7 +52,8 @@ router.post('/login',
   globalBruteforce.prevent,
   userBruteforce.getMiddleware({
     key: function(req, res, next){
-      next(req.body.fullName, req.body.accNumber)
+      const key = `${req.body.fullName}_${req.body.accNumber}`
+     next(key)
     }
   }), login); // Logs the customer in
 
