@@ -1,6 +1,7 @@
 const customer = require('../models/customerModel.js')
 const generateJwt = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
+const { invalidateToken } = require('../middleware/authMiddleware.js')
 
 //Registration of a Customer 
 const register = async (req, res) => {
@@ -73,14 +74,25 @@ const login = async (req, res) => {
         req.brute.reset(()=> {
             const safeCustomer = customerData.toObject ? customerData.toObject() : customerData;
             delete safeCustomer.userPassword;
-            return res.status(200).json({ message: "Login successful", customer: safeCustomer });
+            return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: generateJwt(fullName) });
         })
 
     } catch (error) {
         console.error('Login error:', error);
         return res.status(500).json({ message: "Server error during login" });
     }
-};
+}
+
+//added so long, still need a button to connect to, maybe on portal and make payment screens?
+const logout = async(req, res) => {
+    const authHeader = req.authHeader['authorization'] //strip header for token value
+    const token = authHeader.split(" ")[1]
+    if (!token) { 
+        return res.status(400).json({message: "You need to be logged in before you can log out"}) //check if there is a token, if not error
+    }
+    invalidateToken(token) //else handle blacklisting it
+    res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
+}
 
 module.exports = {
     register,
