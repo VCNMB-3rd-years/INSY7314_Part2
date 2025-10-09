@@ -69,8 +69,13 @@ const login = async (req, res) => {
         const safeCustomer = customerData.toObject ? customerData.toObject() : customerData;
         delete safeCustomer.userPassword;
 
-        //generate a session token when a user logs in to validate their access
-        return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: generateJwt(fullName)});
+        //Reset brute-force counter on successful login
+        req.brute.reset(()=> {
+            const safeCustomer = customerData.toObject ? customerData.toObject() : customerData;
+            delete safeCustomer.userPassword;
+            return res.status(200).json({ message: "Login successful", customer: safeCustomer });
+        })
+
     } catch (error) {
         console.error('Login error:', error);
         return res.status(500).json({ message: "Server error during login" });
