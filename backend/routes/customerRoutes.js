@@ -1,7 +1,7 @@
 const express = require('express')
 const ExpressBrute = require('express-brute');
 
-const {register, login } = require('../controllers/customerController.js')
+const {register, login, deleteAll } = require('../controllers/customerController.js')
 
 
 const store = new ExpressBrute.MemoryStore(); 
@@ -58,6 +58,7 @@ router.post('/login',
   }), login); // Logs the customer in
 
 
+router.delete('/deleteAll', deleteAll)
 
 
   //Testing puposes:

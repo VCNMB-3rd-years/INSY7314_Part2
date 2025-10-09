@@ -130,9 +130,20 @@ const login = async (req, res) => {
     }
 };
 
+// Delete all customers this is just to clear the db, if there are too many users will be commented out after use
+// const deleteAll = async (req, res) => {
+//     try {
+//         await customer.deleteMany({});
+//         return res.status(200).json({ message: "All customers deleted" });
+//     } catch (error) {
+//         return res.status(500).json({ error: error.message });
+//     }
+// };
+
 module.exports = {
     register,
-    login
+    login,
+    deleteAll
 }
 
 /*
