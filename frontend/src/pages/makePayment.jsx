@@ -6,7 +6,7 @@ export default function CreatePayment() {
     const [formData, setFormData] = useState({
         customerName: '',
         customerAcc: '',
-        amount: 0,
+        amount: '',
         currency: '',
         provider: '',
         swiftCode: '',
@@ -14,13 +14,7 @@ export default function CreatePayment() {
     })
 
     const handleInputChange = (e) => {
-    
-        const { name, value } = e.target //pull details of which input box is changing
-
-        // if (name === "currency" || name === "swiftCode" || name === "provider") {
-        //     value = value.toUpperCase() //CAPITALISE CURRENCY INITIALS, SWIFTCODES AND PROVIDER NAMES
-        // }
-        
+        const { name, value } = e.target //pull details of which input box is changing        
         setFormData({...formData, [name]: value}) //updates variable data as user types    
     }
 
@@ -31,7 +25,7 @@ export default function CreatePayment() {
         setFormData({
             customerName: '',
             customerAcc: '',
-            amount: 0,
+            amount: '',
             currency: '',
             provider: '',
             swiftCode: '',
@@ -43,7 +37,7 @@ export default function CreatePayment() {
         setFormData({
             customerName: '',
             customerAcc: '',
-            amount: 0,
+            amount: '',
             currency: '',
             provider: '',
             swiftCode: '',
@@ -55,8 +49,8 @@ export default function CreatePayment() {
     const accPattern = "^acc\\d{9}$" //(W3Schools, 2025)
     const currencyPattern = "^[A-Z]{3}$" //(W3Schools, 2025)
     const providerPattern = "^[a-zA-Z\s]+$" //(W3Schools, 2025)
-    const swiftCodePattern = "^([a-zA-Z]{4})[-\s]?([a-zA-Z]{2})[-\s]?([0-9a-zA-Z]{2})([-\s]?[0-9a-zA-Z]{3})?$" //(Klesun, 2024)
-    const amountPattern = "^((?!0)\d{1,10}|0|\.\d{1,2})($|\.$|\.\d{1,2}$)" //()
+    const swiftCodePattern = "^([a-zA-Z]{4})[-\\s]?([a-zA-Z]{2})[-\\s]?([0-9a-zA-Z]{2})([-\\s]?[0-9a-zA-Z]{3})?$" //(Klesun, 2024)
+    //const amountPattern = "^((?!0)\d{1,10}|0|\.\d{1,2})($|\.$|\.\d{1,2}$)" //()
 
     //(Reactjs, 2025)
     return(
@@ -120,7 +114,6 @@ export default function CreatePayment() {
                         required
                         min="0.01" //allows decimal entries
                         step="0.01"
-                        pattern={amountPattern}
                         title="Amount must be a positive number with up to two decimals"
                     >
                     </input>

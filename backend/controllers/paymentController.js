@@ -34,7 +34,7 @@ const createPayment = async(req, res) => {
     }
 
     //sanitize payment date (payment details entered)
-    if (!validator.isCurrency(sanitizedAmount.toString(), {allow_negatives: false})) {
+    if (isNaN(sanitizedAmount) || sanitizedAmount <= 0) {
         return res.status(400).json({message: "Amount must be a postive whole number"})
     }
 
@@ -57,9 +57,11 @@ const createPayment = async(req, res) => {
     try {
         const payment = await Payment.create({
             customerName: sanitizedName, 
+            customerAcc: sanitizedAccNumber,
             amount: sanitizedAmount, 
-            currency: sanitizedCurrency, 
-            provider: sanitizedProvider, 
+            currency: sanitizedCurrency.toUpperCase(), 
+            provider: sanitizedProvider.toUpperCase(), 
+            swiftCode: sanitizedSwiftCode.toUpperCase(),
             verified: false}) //create the payment object with THE SANITIZED INPUTS
 
         return res.status(201).json({message: "Payment created successfully.", payment: payment}) //returnt that the object was created and logged in db
@@ -75,9 +77,9 @@ const verifyPayment = async(req, res) => {
     let {customerName, amount, currency, provider, verified} = req.body //pull payment object from frontend
 
     //INPUT SANITISING FOR XSS ATTACKS
-    customerName = xss.customerName
-    currency = xss.currency
-    provider = xss.provider
+    customerName = xss(customerName)
+    currency = xss(currency)
+    provider = xss(provider)
 
     try {
         const payment = await Payment.findByIdAndUpdate(id, {verified}, {new: true}) //find the payment from the db and update where verified field updates
@@ -104,10 +106,21 @@ const getPendingPayments = async(req, res) => {
     }
 }
 
+//TESTING PURPOSES
+const deleteAllPayments = async (req, res) => {
+    try {
+        await Payment.deleteMany({});
+        return res.status(200).json({ message: 'All payments have been deleted successfully.' });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     createPayment, 
     verifyPayment,
-    getPendingPayments
+    getPendingPayments,
+    deleteAllPayments
 }
 
 /*

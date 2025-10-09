@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginCustomer, loginEmployee } from '../services/apiService.js';
+import { useAuth } from '../context/authContext.js';
 import '../App.css';
 
 export default function Login() {
@@ -32,6 +33,8 @@ export default function Login() {
           accNumber: formData.accNumber,
           userPassword: formData.password,
         });
+        const { token } = response.data
+        useAuth().login(token)
         console.log(response.data);
         navigate('/makePayment');
       } else {
@@ -39,6 +42,8 @@ export default function Login() {
           username: formData.fullName,
           password: formData.password,
         });
+        const { token } = response.data
+        useAuth().login(token)
         console.log(response.data);
         navigate('/paymentPortal');
       }

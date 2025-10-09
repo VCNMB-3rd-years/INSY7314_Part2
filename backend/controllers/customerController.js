@@ -139,7 +139,7 @@ const login = async (req, res) => {
 
 //added so long, still need a button to connect to, maybe on portal and make payment screens?
 const logout = async(req, res) => {
-    const authHeader = req.authHeader['authorization'] //strip header for token value
+    const authHeader = req.headers['authorization'] //strip header for token value
     const token = authHeader.split(" ")[1]
     if (!token) { 
         return res.status(400).json({message: "You need to be logged in before you can log out"}) //check if there is a token, if not error
