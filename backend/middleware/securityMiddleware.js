@@ -17,7 +17,7 @@ app.use(helmet({ //(NpmJs, 2025)
                 'style-src': ["'self'"], //allows inline styling where needed (NpmJs, 2025) (csp headers)
                 'img-src': ["'self'", "data:"], //allows images and base64 date (NpmJs, 2025)
                 'object-src': ["'none'"],
-                'frame-ancestors': ["'self'"], //prevents this webiste from being embedded in another website to prevent clickjacking (Patel, 2024)
+                'frame-ancestors': ["'self'"], //prevents this webiste from being embedded in another website to prevent clickjacking (Patel, 2024; Koziy, 2025)
                 'upgrade-insecure-requests': [], //(Next, 2025; StackHawk, 2025 ) Forces http websites to be HTTPs (csp headers)
             }
         },
@@ -51,6 +51,7 @@ module.exports = {securityMiddleware}
     AppSecEngineer. 18 December 2024. NO MORE Stored XSS Flaws in Your NodeJS Apps. [online video]. Available at: <https://www.youtube.com/watch?v=N8uKFarFZAQ> [Accessed 8 October 2025]
     Gavaudan, L. 17 June 2022. react button onClick redirect page. [Online]. Available at: <https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page> [Accessed 8 October 2025]
     Goode, T. 2025. cors. [Online]. Available at: <https://expressjs.com/en/resources/middleware/cors.html> [Accessed 8 October 2025]
+    Kpziy, S. 2025. Clickjacking Attacks and Protecting Your Web Products. [Online]. Available at:  https://serhiikoziy.medium.com/understanding-clickjacking-attacks-and-protecting-your-react-application-c32c953d0812
     IIE Emeris School of Computer Science. 19 July 2024. APDS7311 - Setting up CircleCi and SonarQube. [online video]. Available at: <https://youtu.be/I4CyzX5rhLU?si=x5jZT_zkXDjKekRo> [Accessed 8 October 2025]
     Next, 2025. How to set a Content Security Policy (CSP) for your Next.js application. [Online]. Available at: https://nextjs.org/docs/app/guides/content-security-policy [Accessed 9 October 2025]
     NpmJs. March 2025. Helmet. [Online]. Available at: <https://www.npmjs.com/package/helmet> [Accessed 8 October 2025]
