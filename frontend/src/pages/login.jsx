@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginCustomer, loginEmployee } from '../services/apiService.js';
+import { useAuth } from '../context/authContext.jsx';
 import '../App.css';
 
 export default function Login() {
@@ -11,6 +12,7 @@ export default function Login() {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth()
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,6 +34,8 @@ export default function Login() {
           accNumber: formData.accNumber,
           userPassword: formData.password,
         });
+        const { token } = response.data
+        login(token)
         console.log(response.data);
         navigate('/makePayment');
       } else {
@@ -39,6 +43,8 @@ export default function Login() {
           username: formData.fullName,
           password: formData.password,
         });
+        const { token } = response.data
+        login(token)
         console.log(response.data);
         navigate('/paymentPortal');
       }
@@ -49,8 +55,11 @@ export default function Login() {
         password: '',
       });
     } catch (err) {
+      console.error('Login error:', err);
       setError(
-        err.response?.data?.message || 'an error occured during login'
+        err.response?.data?.message ||
+        err.message ||
+        'An error occurred during login.'
       );
     }
   };
