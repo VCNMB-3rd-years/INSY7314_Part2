@@ -3,6 +3,8 @@ require('dotenv').config()
 const port = process.env.API_PORT || 3002 //default value passed if env file doesnt render
 const {connectToMongo} = require('./services/dbService.js') //to connect to db
 const paymentRoutes = require('./routes/paymentRoutes.js')
+const customerRoutes = require('./routes/customerRoutes.js')
+const employeeRoutes = require('./routes/employeeRoutes.js')
 const {securityMiddleware} = require('./middleware/securityMiddleware.js')
 const https = require('https') //For the SSL certificate
 //fs is for file system
@@ -14,10 +16,6 @@ const options = {
     key: fs.readFileSync('./certs/localhost+1-key.pem'),
     cert: fs.readFileSync('./certs/localhost+1.pem')
 }
-
-
-const customerRoutes = require('./routes/customerRoutes.js')
-const employeeRoutes = require('./routes/employeeRoutes.js')
 
 const app = express() //runs express with default parameters
 
