@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const User = require('../models/userModel.js')
 require('dotenv').config()
 
 //helper method to generate tokens and takes in name
@@ -11,4 +10,4 @@ const generateJwt = (name) => {
     })
 }
 
-module.exports(generateJwt)
+module.exports = generateJwt
