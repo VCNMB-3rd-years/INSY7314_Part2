@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { loginCustomer, loginEmployee } from '../services/apiService.js';
 import '../App.css';
 
@@ -9,6 +10,8 @@ export default function Login() {
     accNumber: '',
     password: '',
   });
+
+  const [showPassword, setShowPassword] = useState(false); //GeeksforGeeks, 2025
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -16,6 +19,13 @@ export default function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError('');
   };
+
+
+//toggle needed
+ const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -81,15 +91,33 @@ export default function Login() {
           />
           <br />
 
+{/*(GeeksforGeeks, 2025) The enable show password part*/}
+        <div style={{ position: 'relative', display: 'inline-block' }}>
           <input
-            type="password"
+            type={showPassword? 'text' : 'password'}
             name="password"
             placeholder="Password"
             value={formData.password}
             onChange={handleInputChange}
             required
+            style={{ paddingRight: '40px' }}
           />
+          <span
+              onClick={togglePasswordVisibility}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+              }}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
           <br />
+
+
           <input
             type="text"
             name="accNumber"
@@ -109,5 +137,8 @@ export default function Login() {
 }
 
 /*
-W3Schools. 2025. RegExp Character Classes. [online]  available at: https://www.w3schools.com/js/js_regexp_characters.asp date accessed date 09 October 2025
+REFERENCES
+===============
+GeeksforGeeks, 2025. How to Show and Hide Password in React Native ? [Online] Available at: https://www.geeksforgeeks.org/react-native/how-to-show-and-hide-password-in-react-native/ [Accessed 09 October 2025]
+W3Schools. 2025. RegExp Character Classes. [online]  available at: https://www.w3schools.com/js/js_regexp_characters.asp [Accessed 09 October 2025]
 */
