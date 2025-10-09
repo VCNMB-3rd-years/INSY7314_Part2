@@ -3,12 +3,12 @@ const Payment = require('../models/paymentModel.js') //connect model to controll
 
 //CREATE PAYMENT (post)
 const createPayment = async(req, res) => {
-    let {customerName, amount, currency, provider} = req.body //collect input from frontend form
+    const {customerName, amount, currency, provider} = req.body //collect input from frontend form
 
     //INPUT SANITISING FOR XSS ATTACKS
-    customerName = xss.customerName
-    currency = xss.currency
-    provider = xss.provider
+    // customerName = xssProtect.customerName
+    // currency = xssProtect.currencyc
+    // provider = xssProtect.provider
 
     if (!customerName || !amount || !currency || !provider) { //check for nulls in payment fields and double check a user is logged in
         return res.status(400).json({message: "Please ensure all required fields are filled out"})
