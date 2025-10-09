@@ -54,7 +54,7 @@ export default function RegisterCustomer() {
                         onChange={handleInputChange}
                         required
                         pattern={namePattern}
-                        title="Ensure that the name enters has no special characters in it, and between "
+                        title="Ensure that the name enters has no special characters in it, and between 1 and 50 "
                     >
                     </input>
 
@@ -94,7 +94,7 @@ export default function RegisterCustomer() {
                         value={formData.userPassword}
                         onChange={handleInputChange}
                         pattern={passwordPattern}
-                        title='Password must contain 1 number (0-9), 1 uppercase letter, 1 lowercase letter, 1 non-alphanumeric character, and be between 8-16 characters with no spaces.'
+                        title='Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character.'
                         required
                     />
                     <br>
