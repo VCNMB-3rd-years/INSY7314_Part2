@@ -53,7 +53,7 @@ module.exports = {securityMiddleware}
     Goode, T. 2025. cors. [Online]. Available at: <https://expressjs.com/en/resources/middleware/cors.html> [Accessed 8 October 2025]
     IIE Emeris School of Computer Science. 19 July 2024. APDS7311 - Setting up CircleCi and SonarQube. [online video]. Available at: <https://youtu.be/I4CyzX5rhLU?si=x5jZT_zkXDjKekRo> [Accessed 8 October 2025]
     Next, 2025. How to set a Content Security Policy (CSP) for your Next.js application. [Online]. Available at: https://nextjs.org/docs/app/guides/content-security-policy [Accessed 9 October 2025]
-    pmJs. March 2025. Helmet. [Online]. Available at: <https://www.npmjs.com/package/helmet> [Accessed 8 October 2025]
+    NpmJs. March 2025. Helmet. [Online]. Available at: <https://www.npmjs.com/package/helmet> [Accessed 8 October 2025]
     SquahLabs. 21 October 2023. How To Use A Regex To Only Accept Numbers 0-9. [Online]. Available at: <https://www.squash.io/how-to-use-a-regex-to-only-accept-numbers-0-9/> [Accessed 8 October 2025]
     StackHawk, 2025. React Content Security Policy Guide: What It Is and How to Enable It. [Online]. Available at: https://www.stackhawk.com/blog/react-content-security-policy-guide-what-it-is-and-how-to-enable-it/ [Accessed 9 October 2025]
     */
