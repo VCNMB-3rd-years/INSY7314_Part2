@@ -71,8 +71,8 @@ const login = async (req, res) => {
         //Reset brute-force counter on successful login
         req.brute.reset(()=> {
             const safeCustomer = customerData.toObject ? customerData.toObject() : customerData;
-            delete safeCustomer.userPassword;
-            return res.status(200).json({ message: "Login successful", customer: safeCustomer });
+            delete safeCustomer.userPassword;
+            return res.status(200).json({ message: "Login successful", customer: safeCustomer });
         })
 
     } catch (error) {
