@@ -1,4 +1,5 @@
 const customer = require('../models/customerModel.js')
+const generateJwt = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
 
 //Registration of a Customer 
@@ -36,7 +37,7 @@ const register = async (req, res) => {
         const safe = createdCustomer.toObject ? createdCustomer.toObject() : createdCustomer;
         delete safe.userPassword;
 
-        return res.status(201).json({ message: "Customer registered", employee: safe });
+        return res.status(201).json({ message: "Customer registered", employee: safe, token: generateJwt(fullName) });
 
     }
     catch (error) {
@@ -68,7 +69,8 @@ const login = async (req, res) => {
         const safeCustomer = customerData.toObject ? customerData.toObject() : customerData;
         delete safeCustomer.userPassword;
 
-        return res.status(200).json({ message: "Login successful", customer: safeCustomer });
+        //generate a session token when a user logs in to validate their access
+        return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: generateJwt(fullName)});
     } catch (error) {
         console.error('Login error:', error);
         return res.status(500).json({ message: "Server error during login" });
