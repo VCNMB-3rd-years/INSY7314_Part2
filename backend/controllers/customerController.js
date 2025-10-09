@@ -1,4 +1,5 @@
 const customer = require('../models/customerModel.js')
+const generateJwt = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
 
 //Registration of a Customer 
@@ -36,7 +37,7 @@ const register = async (req, res) => {
         const safe = createdCustomer.toObject ? createdCustomer.toObject() : createdCustomer;
         delete safe.userPassword;
 
-        return res.status(201).json({ message: "Customer registered", employee: safe });
+        return res.status(201).json({ message: "Customer registered", employee: safe, token: generateJwt(fullName) });
 
     }
     catch (error) {
