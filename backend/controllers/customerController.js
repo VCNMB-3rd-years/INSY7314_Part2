@@ -66,8 +66,8 @@ const register = async (req, res) => {
 
         // (Gyawali, 2024)
         const safe = createdCustomer.toObject ? createdCustomer.toObject() : createdCustomer;
-        delete safe.userPassword;
-        return res.status(201).json({ message: "Customer registered", customer: safe, token: generateJwt(fullName) });
+        delete safe.userPassword;        
+        return res.status(201).json({ message: "Customer registered", customer: safe });
     }
     catch (error) {
         return res.status(500).json({ error: error.message })
@@ -121,7 +121,14 @@ const login = async (req, res) => {
         req.brute.reset(()=> {
             const safeCustomer = customerData.toObject ? customerData.toObject() : customerData;
             delete safeCustomer.userPassword;
-            return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: generateJwt(fullName) });
+
+            const token = generateJwt({ //pass sanitized fields to jwt to store logged user in headers for payment verification
+                fullName: sanitizedFullName,
+                accNumber: sanitizedAccNumber,
+            }, 
+            "customer")
+
+            return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: token });
         })
 
     } catch (error) {
@@ -143,7 +150,8 @@ const logout = async(req, res) => {
 
 module.exports = {
     register,
-    login
+    login,
+    logout
 }
 
 /*

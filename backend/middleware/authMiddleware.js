@@ -16,13 +16,20 @@ const verifyToken = (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1]
 
     //401 error for no token found
-    if (!token) return res.status(401).json({message: "No token"})
-
+    if (!token) { 
+        return res.status(401).json({message: "No token"})
+    }
     //token has already been logged out
-    if (tokenBlacklist.has(token)) return res.status(401).json({message: "Invalidated token"})
+    if (tokenBlacklist.has(token)) {
+        return res.status(401).json({message: "Invalidated token"})
+    }
 
-    jwt.verify(token, process.nextTick.JWT_SECRET, (err) => {
-        if (err) return res.status(403).json({message: "Invalid token"}) //403 forbidden error
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) { 
+            return res.status(403).json({message: "Invalid token"}) //403 forbidden error
+        }
+
+        req.user = decoded //extracts logged user details to verify who has access across the routes
         next() //this middleware piece is complete, go to wherever it needs to go after
     })
 }

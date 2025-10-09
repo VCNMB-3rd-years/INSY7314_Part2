@@ -47,7 +47,7 @@ export default function CreatePayment() {
                     <input
                         type="text"
                         name="customerName"
-                        placeholder="Your name"
+                        placeholder="eg. SamanthaSmith"
                         value={formData.customerName}
                         onChange={handleInputChange}
                         required
@@ -59,7 +59,7 @@ export default function CreatePayment() {
                     <input
                         type="text"
                         name="provider"
-                        placeholder="Provider name"
+                        placeholder="eg. SWIFT"
                         value={formData.provider}
                         onChange={handleInputChange}
                         required
@@ -81,7 +81,7 @@ export default function CreatePayment() {
                     <br></br>
 
                     <input
-                        type="number"
+                        type="text"
                         name="amount"
                         placeholder="e.g. 3000"
                         value={formData.amount}
