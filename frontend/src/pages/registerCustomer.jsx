@@ -35,7 +35,7 @@ export default function RegisterCustomer() {
         })
     }
     const namePattern = "^[a-zA-Z0-9]{1,50}$" // w3schools
-    const idPattern ="^(?!.*[A-Za-z])\\d{13}$" // w3schools
+    const idPattern = "^(?!.*[A-Za-z])\\d{13}$" // w3schools
     const accNrPattern = "^acc\\d{9}$"; // w3schools
     const passwordPattern = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])[^\\s]{8,16}$"; // qho, 2023
 

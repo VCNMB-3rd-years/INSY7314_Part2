@@ -62,8 +62,8 @@ export default function Login() {
       password: '',
     });
     setError('');
-  }; 
-const accNrPattern = "^acc\d{9}$"; // W3schools, 2025
+  };
+  const accNrPattern = "^acc\\d{9}$"; // w3schools
   return (
     <div>
       <h1>Login</h1>
@@ -80,7 +80,7 @@ const accNrPattern = "^acc\d{9}$"; // W3schools, 2025
             required
           />
           <br />
-          
+
           <input
             type="password"
             name="password"
@@ -96,12 +96,12 @@ const accNrPattern = "^acc\d{9}$"; // W3schools, 2025
             placeholder="Account Number (customers only)"
             value={formData.accNumber.toLowerCase()}
             onChange={handleInputChange}
-            pattern= {accNrPattern}
+            pattern={accNrPattern}
             title="Account number must start with 'acc' followed by 9 digits"
           />
           <br />
           <button type="submit">Submit</button>
-          <button type="reset" onClick={handleReset}>Reset</button>          
+          <button type="reset" onClick={handleReset}>Reset</button>
         </form>
       </div>
     </div>
