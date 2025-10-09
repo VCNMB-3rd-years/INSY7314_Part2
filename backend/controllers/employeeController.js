@@ -1,4 +1,5 @@
 const Employee = require('../models/employeeModel.js')
+const generateJwt = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
 
 //Registration of a Customer (post)
@@ -34,7 +35,7 @@ const registerEmployee = async (req, res) => {
         const safe = createdEmployee.toObject ? createdEmployee.toObject() : createdEmployee;
         delete safe.password;
 
-        return res.status(201).json({ message: "Employee registered", employee: safe });
+        return res.status(201).json({ message: "Employee registered", employee: safe, token: generateJwt(username) });
 
 
     }
@@ -71,7 +72,7 @@ const loginEmployee = async (req, res) => {
         const safeEmployee = employeeData.toObject ? employeeData.toObject() : employeeData;
         delete safeEmployee.password;
 
-        return res.status(200).json({ message: "Login successful", employee: safeEmployee });
+        return res.status(200).json({ message: "Login successful", employee: safeEmployee, token: generateJwt(username)});
     }
     catch (error) {
         console.error('Login error:', error);
