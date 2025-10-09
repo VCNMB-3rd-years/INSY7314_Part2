@@ -63,7 +63,7 @@ export default function Login() {
     });
     setError('');
   };
-
+  const accNrPattern = "^acc\\d{9}$"; // w3schools
   return (
     <div>
       <h1>Login</h1>
@@ -80,7 +80,7 @@ export default function Login() {
             required
           />
           <br />
-          
+
           <input
             type="password"
             name="password"
@@ -94,14 +94,20 @@ export default function Login() {
             type="text"
             name="accNumber"
             placeholder="Account Number (customers only)"
-            value={formData.accNumber}
+            value={formData.accNumber.toLowerCase()}
             onChange={handleInputChange}
+            pattern={accNrPattern}
+            title="Account number must start with 'acc' followed by 9 digits"
           />
           <br />
           <button type="submit">Submit</button>
-          <button type="reset" onClick={handleReset}>Reset</button>          
+          <button type="reset" onClick={handleReset}>Reset</button>
         </form>
       </div>
     </div>
   );
 }
+
+/*
+W3Schools. 2025. RegExp Character Classes. [online]  available at: https://www.w3schools.com/js/js_regexp_characters.asp date accessed date 09 October 2025
+*/
