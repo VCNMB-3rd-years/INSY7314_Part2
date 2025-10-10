@@ -3,6 +3,7 @@ const ExpressBrute = require('express-brute');
 const { verifyToken } = require('../middleware/authMiddleware.js')
 const {register, login, logout } = require('../controllers/customerController.js')
 
+
 const store = new ExpressBrute.MemoryStore(); 
 
 //There are two ways of brute attack 1. user and then 2.per IP 
@@ -56,7 +57,7 @@ router.post('/login',
     }
   }), login); // Logs the customer in
 
-router.get('/logout', verifyToken, logout) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
+router.post('/logout', verifyToken, logout) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
 
 //router.delete('/deleteAll', deleteAll)
 

@@ -158,6 +158,7 @@ const logout = async(req, res) => {
         httpOnly: true, //(Ghorbanian and Postal, 2022)
         secure: true,
         sameSite: 'Strict' //(Csarmiento. 8 April 2022)
+        path: '/'
     })
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
 }
@@ -175,8 +176,7 @@ const logout = async(req, res) => {
 module.exports = {
     register,
     login,
-    logout,
-   // deleteAll
+    logout
 }
 
 /*
