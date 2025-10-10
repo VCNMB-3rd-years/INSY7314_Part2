@@ -25,7 +25,7 @@ const Hero = () => {
           />
         </div>
         <p className='md:text-2xl text-xl font-bold text-[#587B7F]'> 
-             Make quick and efficient payments via our SWIT payment gate!
+             Make quick and efficient payments via our <b>SWITF</b> payment gate!
         </p>
          </div>
     </div>

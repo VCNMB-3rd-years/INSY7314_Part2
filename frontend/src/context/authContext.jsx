@@ -1,7 +1,7 @@
 //need required imports
 import { createContext, useContext, useState } from 'react';
 import { useEffect } from 'react';
-import { setAuthToken } from '../interfaces/axiosInstance.js'
+import { setAuthToken, api } from '../interfaces/axiosInstance.js'
 
 //create the section of memory first for remembering if user is logged in
 const AuthContext = createContext()
@@ -14,9 +14,19 @@ export function AuthProvider({children}) { //any child object this method has to
       setIsAuthenticated(true) //(Bajgain, 2025)
       setToken(newToken) //set the value of the token with the new passed in token (Bajgain, 2025)
     }
-    const logout = () => {
+    
+    const logout = async () => {
+        try{
+            await api.post('/customer/logout');
         setIsAuthenticated(false); //(Bajgain, 2025)
         setToken(null); //(Bajgain, 2025)
+
+        console.log("Logout was successful and session has been cleared!");
+
+        }catch (error)
+        {
+            console.error("Logout failed:", error);
+        }
     }
 
     useEffect(() => { //sets up token value in axios as it chanegs
