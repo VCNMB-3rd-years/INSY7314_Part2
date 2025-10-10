@@ -157,7 +157,7 @@ const logout = async(req, res) => {
     res.clearCookie('token', { //clear out the cookie to clear out the jwt and session as well (Ghorbanian and Postal, 2022)
         httpOnly: true, //(Ghorbanian and Postal, 2022)
         secure: true,
-        sameSite: 'Strict' //(Csarmiento. 8 April 2022)
+        sameSite: 'Strict', //(Csarmiento. 8 April 2022)
         path: '/'
     })
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
