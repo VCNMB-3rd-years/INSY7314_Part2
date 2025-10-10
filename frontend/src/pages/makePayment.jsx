@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { createPayment } from '../services/apiService.js'
+import { createPayment  } from '../services/apiService.js'
 import { useNavigate } from 'react-router-dom'
 import '../App.css'
 
@@ -34,6 +34,7 @@ export default function CreatePayment() {
         try {
             await createPayment(formData)
             alert('Payment added successfully')
+            navigate('/customerPayments')
             setFormData({
                 customerName: '',
                 customerAcc: '',

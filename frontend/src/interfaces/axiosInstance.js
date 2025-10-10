@@ -19,7 +19,7 @@ export const setAuthToken = (token) => {
 
 //LOGGING OUT WITH COOKIES SET UP
 export const logoutCustomer = async () => {
-  return axios.post('/customer/logout', {}, { withCredentials: true });
+  return api.post('/customer/logout', {}, { withCredentials: true });
 };
 
 export default api
