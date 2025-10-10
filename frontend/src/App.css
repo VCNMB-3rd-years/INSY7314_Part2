@@ -127,6 +127,7 @@
 
 
 /*LOGOUT*/
+
 .logout-button {
 background: none;
 border: none;
@@ -164,6 +165,7 @@ padding: 0.25rem 0.5rem;
 .nav li.active a,
 .nav li.active .logout-button {
   background-color: #555;
+}
 
 
 
