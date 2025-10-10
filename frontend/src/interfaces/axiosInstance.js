@@ -6,6 +6,7 @@ export const api = axios.create({
     headers: {
         'Content-Type': 'application/json'
     },
+    withCredentials: true //sends cookies automatically between back and frontend
 })
 
 export const setAuthToken = (token) => {
