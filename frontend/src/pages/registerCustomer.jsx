@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { registerCustomer } from '../services/apiService.js'
 import { useNavigate } from 'react-router-dom';
 import '../App.css'
+import icon from '../../image/icon.png'
 
 export default function RegisterCustomer() {
     const navigate = useNavigate(); // Initialize navigate hook
@@ -49,62 +50,81 @@ export default function RegisterCustomer() {
     const passwordPattern = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])[^\\s]{8,16}$"; // qho, 2023
 
     return (
-        <div>
+        
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <img 
+            src={icon} 
+            alt="Company Logo" 
+            style={{ width: '200px', height: 'auto', marginBottom: '1px' }} 
+        />
+            
+            
             <h1>Customer Registration</h1>
             <div>
                 <h3>Please fill out details below</h3>
                 <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        name="fullName"
-                        placeholder="Full Name"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                        required
-                        pattern={namePattern}
-                        title="Ensure that the name has no special characters and is between 1 and 30 characters"
-                    />
+                    {/*(Ui prep, 2025) Used it to figire out how to chnage the input fields*/}
+                    <div className="form-group"> 
+                        <label htmlFor="fullName">Full Name</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            placeholder="Full Name"
+                            value={formData.fullName}
+                            onChange={handleInputChange}
+                            required
+                            pattern={namePattern}
+                            title="Ensure that the name enters has no special characters in it, and between 1 and 30 characters"
+                        />
+                    </div>
+                        {/*(Ui prep, 2025) */}
+                    <div className="form-group">
+                        <label htmlFor="idNumber">ID Number</label>
+                        <input
+                            type="text"
+                            id="idNumber"
+                            name="idNumber"
+                            placeholder="ID Number"
+                            value={formData.idNumber}
+                            onChange={handleInputChange}
+                            required
+                            pattern={idPattern}
+                            title="ensure that the id is a lenght of 13 letters and no alphabetical characters"
+                        />
+                    </div>
 
-                    <br />
+                    {/*(Ui prep, 2025) */}
+                    <div className="form-group">
+                        <label htmlFor="accNumber">Account Number</label>
+                        <input
+                            type="text"
+                            id="accNumber"
+                            name="accNumber"
+                            placeholder="e.g. acc123456789"
+                            value={formData.accNumber.toLowerCase()}
+                            onChange={handleInputChange}
+                            pattern={accNrPattern}
+                            title="Account number must start with 'acc' followed by 9 digits"
+                            required
+                        />
+                    </div>
 
-                    <input
-                        type="text"
-                        name="idNumber"
-                        placeholder="ID Number"
-                        value={formData.idNumber}
-                        onChange={handleInputChange}
-                        required
-                        pattern={idPattern}
-                        title="Ensure that the ID is 13 digits with no alphabetical characters"
-                    />
-
-                    <br />
-
-                    <input
-                        type="text"
-                        name="accNumber"
-                        placeholder="e.g. acc123456789"
-                        value={formData.accNumber.toLowerCase()}
-                        onChange={handleInputChange}
-                        pattern={accNrPattern}
-                        title="Account number must start with 'acc' followed by 9 digits"
-                        required
-                    />
-
-                    <br />
-
-                    <input
-                        type="password"
-                        name="userPassword"
-                        placeholder="Password"
-                        value={formData.userPassword}
-                        onChange={handleInputChange}
-                        pattern={passwordPattern}
-                        title="Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character, and be 8-16 characters long"
-                        required
-                    />
-
-                    <br />
+                    {/*(Ui prep, 2025) */}
+                    <div className="form-group">
+                        <label htmlFor="userPassword">Password</label>
+                        <input
+                            type="password"
+                            id="userPassword"
+                            name="userPassword"
+                            placeholder="password"
+                            value={formData.userPassword}
+                            onChange={handleInputChange}
+                            pattern={passwordPattern}
+                            title='Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character.'
+                            required
+                        />
+                    </div>
 
                     <button type="submit">Submit</button>
                     <button type="reset" onClick={handleReset}>Reset</button>
@@ -116,6 +136,7 @@ export default function RegisterCustomer() {
 
 /*
 REFERENCES:
-    W3Schools. 2025. RegExp Character Classes. [online] available at: https://www.w3schools.com/js/js_regexp_characters.asp date accessed 09 October 2025
-    qho. 2023. strict password validator. [online] available at: https://regex101.com/r/0bH043/3 date accessed 09 October 2025
+    Ui prep, 2025. UI Designer’s Guide to Creating Forms & Inputs. [Online]Available at: https://www.uiprep.com/blog/ui-designers-guide-to-creating-forms-inputs
+    W3Schools. 2025. RegExp Character Classes. [online]  Available at: https://www.w3schools.com/js/js_regexp_characters.asp date accessed date 09 October 2025
+    qho. 2023. strict password validator. [online] available at: https://regex101.com/r/0bH043/3 date accessed date 09 October 2025
 */
