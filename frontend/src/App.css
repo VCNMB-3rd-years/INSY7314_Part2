@@ -169,6 +169,36 @@ padding: 0.25rem 0.5rem;
 
 
 
+
+.btn-custom-primary {
+    background-color: #587B7F;
+    border-color: #587B7F;
+    color: white;
+}
+.btn-custom-primary:hover {
+    background-color: #394032;
+    border-color: #394032;
+}
+.btn-custom-secondary {
+    background-color: transparent;
+    border-color: #8DAB7F;
+    color: #394032;
+}
+.btn-custom-secondary:hover {
+    background-color: #8DAB7F;
+    color: white;
+}
+.form-control:focus {
+    border-color: #587B7F !important;
+    box-shadow: 0 0 0 0.25rem rgba(88, 123, 127, 0.25) !important;
+}
+
+
+
+
+
+
+
   /*
 REFERENCES
 ===================
