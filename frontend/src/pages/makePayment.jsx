@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { createPayment } from '../services/apiService.js'
+import { createPayment  } from '../services/apiService.js'
+import { useNavigate } from 'react-router-dom'
 import '../App.css'
 
 export default function CreatePayment() {
@@ -12,26 +13,47 @@ export default function CreatePayment() {
         swiftCode: '',
         verified: false
     })
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const { name, value } = e.target //pull details of which input box is changing        
         setFormData({...formData, [name]: value}) //updates variable data as user types    
+        setError('')
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        await createPayment(formData)
-        alert('Payment added successfully')
-        setFormData({
-            customerName: '',
-            customerAcc: '',
-            amount: '',
-            currency: '',
-            provider: '',
-            swiftCode: '',
-            verified: false
-        })
+
+        //if anything was left empty, tell user to fill out data
+        if (!formData.customerName || !formData.customerAcc || !formData.amount || !formData.currency || !formData.provider || !formData.swiftCode) {
+            setError('Please fill out all required fields.');
+            return;
+        }
+
+        try {
+            await createPayment(formData)
+            alert('Payment added successfully')
+            navigate('/customerPayments')
+            setFormData({
+                customerName: '',
+                customerAcc: '',
+                amount: '',
+                currency: '',
+                provider: '',
+                swiftCode: '',
+                verified: false
+            })
+        } catch (error) {
+            console.error('Error processing payment:', error);
+            setError(
+                error.response?.data?.message ||
+                error.message ||
+                'Sorry, we could not process your payment'
+            )
+        }
     }
+    
 
     const handleReset = (e) => {
         setFormData({
@@ -43,6 +65,7 @@ export default function CreatePayment() {
             swiftCode: '',
             verified: false
         })
+        setError('')
     }
 
     const namePattern = "^[a-zA-Z0-9\s]+$" //(W3Schools, 2025)
@@ -58,6 +81,7 @@ export default function CreatePayment() {
             <h1>Payment Portal</h1>
             <div>
                 <h3>Please fill out details below</h3>
+                {error && <p>{error}</p>}
                 <form onSubmit={handleSubmit} className="form-grid"> 
                     <label htmlFor="customerName">Your Full Name</label>
                     <input

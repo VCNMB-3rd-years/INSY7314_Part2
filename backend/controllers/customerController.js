@@ -128,11 +128,11 @@ const login = async (req, res) => {
             }, 
             "customer")
 
-            res.cookie('token', token, {
-                httpOnly: true, //javascript cant access the cookie so jwt is safe here
-                secure: true, // sends only over https
-                sameSite: 'Strict', //prevents crsf from different origins
-                maxAge: 3 * 60 * 60 * 1000 //3 hours until expiratiaon
+            res.cookie('token', token, { //(Ghorbanian and Postal, 2022)
+                httpOnly: true, //javascript cant access the cookie so jwt is safe here (Ghorbanian and Postal, 2022)
+                secure: true, // sends only over https 
+                sameSite: 'Strict', //prevents crsf from different origins (Csarmiento. 8 April 2022)
+                maxAge: 3 * 60 * 60 * 1000 //3 hours until expiratiaon (Csarmiento. 8 April 2022)
         })
             //console.log('Cookie tracking', res.cookie.token) //TESTING, WANT TO SEE IF TOKEN STORES HERE
             return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: token });
@@ -154,10 +154,10 @@ const logout = async(req, res) => {
         return res.status(400).json({message: "You need to be logged in before you can log out"}) //check if there is a token, if not error
     }
     invalidateToken(token) //else handle blacklisting it
-    res.clearCookie('token', { //clear out the cookie to clear out the jwt and session as well
-        httpOnly: true,
+    res.clearCookie('token', { //clear out the cookie to clear out the jwt and session as well (Ghorbanian and Postal, 2022)
+        httpOnly: true, //(Ghorbanian and Postal, 2022)
         secure: true,
-        sameSite: 'Strict'
+        sameSite: 'Strict' //(Csarmiento. 8 April 2022)
     })
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
 }
@@ -182,6 +182,8 @@ module.exports = {
 /*
     REFERENCES
     =====================
+    Csarmiento. 8 April 2022. How to get HTTP-only cookie in React? [Online]. Avaialble at: <https://stackoverflow.com/questions/68970499/how-to-get-http-only-cookie-in-react> [Accessed 9 October 2025]
+    Ghorbanian, A and Postal, C. 22 September 2022. How To Secure React Applications Against XSS Attacks with HTTP-Only Cookies. [Online]. Available at: <https://www.digitalocean.com/community/tutorials/how-to-secure-react-applications-against-xss-attacks-with-http-only-cookies> [Accessed 9 October 2025]
     Gyawali, B. 2024. Hiding Credentials in Response with Mongoose and Nodejs. [Online]. Available at: https://medium.com/@vikramgyawali57/hiding-credentials-in-response-with-mongoose-and-nodejs-a5d591b373e6 [Accessed 30 September 2025]
     GeeksforGeeks. 2025. How to Validate Data using validator Module in Node.js ? [online] https://www.geeksforgeeks.org/node-js/how-to-validate-data-using-validator-module-in-node-js/ date accessed 09 October 2025
 */

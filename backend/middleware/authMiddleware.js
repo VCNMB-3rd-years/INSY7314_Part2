@@ -9,8 +9,8 @@ const tokenBlacklist = new Set()
 
 const verifyToken = (req, res, next) => {
     //strip the header
-    const authHeader = req.headers["authorization"]
-    console.log("Authorization Header:", authHeader) //debuggin
+    // const authHeader = req.headers["authorization"]
+    // console.log("Authorization Header:", authHeader) //debuggin
 
     //we split after the space, as standard headers look like:
     //Bearer: <token> and we only need the tken part

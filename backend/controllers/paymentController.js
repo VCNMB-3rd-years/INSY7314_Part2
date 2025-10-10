@@ -95,6 +95,21 @@ const verifyPayment = async(req, res) => {
     }
 }
 
+//VIEW ALL CURRENT CUSTOMER PAYMENTS (get)
+const getCustomerPayments = async(req, res) => {
+    try {
+        //ensure someone is logged in when they naviagte to the payment page
+        if (!req.user || !req.user.payload.fullName || !req.user.payload.accNumber) {
+            return res.status(401).json({message: "You muts be logged in to make a payment"}) //401 forbidden if not logged in
+        }
+        const payments = await Payment.find({customerName: req.user.payload.fullName, customerAcc: req.user.payload.accNumber}) //pulls all objects in payment node in db that belong to that user
+        return res.status(200).json(payments)
+    }
+    catch (error) {
+        return res.status(500).json({error: error.message})
+    }
+}
+
 //VIEW ALL PENDING PAYMENTS (get)
 const getPendingPayments = async(req, res) => {
     try {
@@ -120,6 +135,7 @@ module.exports = {
     createPayment, 
     verifyPayment,
     getPendingPayments,
+    getCustomerPayments,
     deleteAllPayments
 }
 
