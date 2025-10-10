@@ -93,3 +93,25 @@ Welcome to payNow, a Payment Portal that enables a smooth, secure handoff of pay
 ---
 
 For any code-level questions about a particular file or symbol above, open the file link and reference the symbol name (e.g., see [`createPayment`](backend/controllers/paymentController.js) in [backend/controllers/paymentController.js](backend/controllers/paymentController.js)).
+
+
+---
+
+
+## Videos of the Website
+
+### Customer Side:
+Link: https://youtu.be/X78mEi2oRfY
+
+### Employee Side:
+Link: https://youtu.be/WRk0WtzKrOc
+
+### Testing of Tokens
+Link: https://youtu.be/47AGMXM_2ws
+
+## Images of the Testing
+
+
+
+
+
