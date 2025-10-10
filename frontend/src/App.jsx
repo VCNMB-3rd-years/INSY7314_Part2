@@ -6,6 +6,7 @@ import RegisterCustomer from './pages/registerCustomer.jsx'
 import WelcomePage from './pages/welcomePage.jsx'
 import Login from './pages/login.jsx'
 import Navbar from './components/Navbar.jsx'
+import PermissionDenied from './pages/permissionDenied.jsx';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/makePayment" element={<CreatePayment />} />
         <Route path="/register" element={<RegisterCustomer />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/permissionDenied" element={<PermissionDenied/>} />
       </Routes> 
       </div>  
     </Router>
