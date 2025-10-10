@@ -34,12 +34,11 @@ export default function RegisterCustomer() {
             userPassword: ''
         })
     }
-    const namePattern = "^[a-zA-Z0-9]{1,50}$" // w3schools
+    const namePattern = "^[a-zA-Z0-9]{1,30}$" // w3schools
     const idPattern = "^(?!.*[A-Za-z])\\d{13}$" // w3schools
     const accNrPattern = "^acc\\d{9}$"; // w3schools
     const passwordPattern = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])[^\\s]{8,16}$"; // qho, 2023
-
-
+    
     return (
         <div>
             <h1>Customer Registration</h1>
@@ -54,7 +53,7 @@ export default function RegisterCustomer() {
                         onChange={handleInputChange}
                         required
                         pattern={namePattern}
-                        title="Ensure that the name enters has no special characters in it, and between 1 and 50 "
+                        title="Ensure that the name enters has no special characters in it, and between 1 and 30 characters"
                     >
                     </input>
 
@@ -108,6 +107,7 @@ export default function RegisterCustomer() {
     )
 }
 /*
-W3Schools. 2025. RegExp Character Classes. [online]  available at: https://www.w3schools.com/js/js_regexp_characters.asp date accessed date 09 October 2025
-qho. 2023. strict password validator. [online] available at: https://regex101.com/r/0bH043/3 date accessed date 09 October 2025
+REFERENCES:
+    W3Schools. 2025. RegExp Character Classes. [online]  available at: https://www.w3schools.com/js/js_regexp_characters.asp date accessed date 09 October 2025
+    qho. 2023. strict password validator. [online] available at: https://regex101.com/r/0bH043/3 date accessed date 09 October 2025
 */

@@ -66,8 +66,8 @@ const register = async (req, res) => {
 
         // (Gyawali, 2024)
         const safe = createdCustomer.toObject ? createdCustomer.toObject() : createdCustomer;
-        delete safe.userPassword;
-        return res.status(201).json({ message: "Customer registered", customer: safe, token: generateJwt(fullName) });
+        delete safe.userPassword;        
+        return res.status(201).json({ message: "Customer registered", customer: safe });
     }
     catch (error) {
         return res.status(500).json({ error: error.message })
@@ -121,7 +121,21 @@ const login = async (req, res) => {
         req.brute.reset(()=> {
             const safeCustomer = customerData.toObject ? customerData.toObject() : customerData;
             delete safeCustomer.userPassword;
-            return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: generateJwt(fullName) });
+
+            const token = generateJwt({ //pass sanitized fields to jwt to store logged user in headers for payment verification
+                fullName: sanitizedFullName,
+                accNumber: sanitizedAccNumber,
+            }, 
+            "customer")
+
+            res.cookie('token', token, {
+                httpOnly: true, //javascript cant access the cookie so jwt is safe here
+                secure: true, // sends only over https
+                sameSite: 'Strict', //prevents crsf from different origins
+                maxAge: 3 * 60 * 60 * 1000 //3 hours until expiratiaon
+        })
+            //console.log('Cookie tracking', res.cookie.token) //TESTING, WANT TO SEE IF TOKEN STORES HERE
+            return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: token });
         })
 
     } catch (error) {
@@ -132,18 +146,26 @@ const login = async (req, res) => {
 
 //added so long, still need a button to connect to, maybe on portal and make payment screens?
 const logout = async(req, res) => {
-    const authHeader = req.authHeader['authorization'] //strip header for token value
-    const token = authHeader.split(" ")[1]
+    //const authHeader = req.headers['authorization'] //strip header for token value
+    //const token = authHeader.split(" ")[1]
+    const token = req.cookies.token
+
     if (!token) { 
         return res.status(400).json({message: "You need to be logged in before you can log out"}) //check if there is a token, if not error
     }
     invalidateToken(token) //else handle blacklisting it
+    res.clearCookie('token', { //clear out the cookie to clear out the jwt and session as well
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict'
+    })
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
 }
 
 module.exports = {
     register,
-    login
+    login,
+    logout
 }
 
 /*
