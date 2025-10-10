@@ -176,7 +176,6 @@ module.exports = {
     register,
     login,
     logout
-    deleteAll
 }
 
 /*
