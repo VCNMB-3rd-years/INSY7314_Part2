@@ -157,7 +157,8 @@ const logout = async(req, res) => {
     res.clearCookie('token', { //clear out the cookie to clear out the jwt and session as well
         httpOnly: true,
         secure: true,
-        sameSite: 'Strict'
+        sameSite: 'Strict',
+        path: '/'
     })
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
 }

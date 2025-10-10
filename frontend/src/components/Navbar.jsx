@@ -5,10 +5,7 @@ import { useAuth } from '../context/authContext.jsx'
 
 
 //calling the logout fuction from the class: Authcontext
-const handleLogout = () => {
-      logout()
-      navigate('/')
-  }
+
 
 //Method comes from youtube video (Web Dev Simplified, 2022)
 function CustomLink({ to, children, ...props }) {
@@ -26,10 +23,18 @@ function CustomLink({ to, children, ...props }) {
 
 console.log('Navbar mounted'); //Log purposes
 
+
+
 //Method comes from youtube video (Web Dev Simplified, 2022)
 export default function Navbar() {
    const { isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
+
+    const handleLogout = async () => {
+      await logout()
+      navigate('/')
+  }
+
   return (
     <nav className="nav">
       <Link to="/" className="site-title">PayNow</Link>
