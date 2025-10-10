@@ -3,9 +3,11 @@ const mongoose = require('mongoose')
 
 const paymentSchema = new mongoose.Schema({ //define layout of a paymentt object
     customerName: {type: String, required: true},
+    customerAcc: {type: String, required: true},
     amount: {type: Number, required: true},
     currency: {type: String, required: true},
     provider: {type: String, required: true},
+    swiftCode: {type: String, required: true},
     verified: {type: Boolean, required: true}
 })
 

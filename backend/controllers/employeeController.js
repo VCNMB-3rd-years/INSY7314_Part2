@@ -1,4 +1,5 @@
 const Employee = require('../models/employeeModel.js')
+const generateJwt = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
 
 //Registration of a Customer (post)
@@ -33,7 +34,6 @@ const registerEmployee = async (req, res) => {
 
         const safe = createdEmployee.toObject ? createdEmployee.toObject() : createdEmployee;
         delete safe.password;
-
         return res.status(201).json({ message: "Employee registered", employee: safe });
 
 
@@ -56,6 +56,14 @@ const loginEmployee = async (req, res) => {
             return res.status(400).json({ message: "Enter all the fields please" })
         }
 
+        // sanitize inputs
+        const sanitizedUsername = validator.escape(username?.toString() || '');
+                
+        //validates the imputs 
+        if (!validator.matches(sanitizedUsername, /^[a-zA-Z0-9\s]+$/)) {
+            return res.status(400).json({ message: "Username must contain only letters, numbers, and spaces" });
+        }
+
         // this tries to find the user in the db based on fullName and accNumber
         const employeeData = await Employee.findOne({ username }).select('+password'); 
         if (!employeeData) {
@@ -71,7 +79,12 @@ const loginEmployee = async (req, res) => {
         const safeEmployee = employeeData.toObject ? employeeData.toObject() : employeeData;
         delete safeEmployee.password;
 
-        return res.status(200).json({ message: "Login successful", employee: safeEmployee });
+        const token = generateJwt({ //pass sanitized fields to jwt to store logged user in headers for payment verification
+            username: sanitizedUsername
+            },
+        "employee")
+
+        return res.status(200).json({ message: "Login successful", employee: safeEmployee, token: token});
     }
     catch (error) {
         console.error('Login error:', error);

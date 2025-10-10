@@ -1,5 +1,7 @@
 const express = require('express')
 const ExpressBrute = require('express-brute');
+const { verifyToken } = require('../middleware/authMiddleware.js')
+const {register, login, logout } = require('../controllers/customerController.js')
 
 const {register, login, deleteAll } = require('../controllers/customerController.js')
 
@@ -57,6 +59,7 @@ router.post('/login',
     }
   }), login); // Logs the customer in
 
+router.get('/logout', verifyToken, logout) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
 
 router.delete('/deleteAll', deleteAll)
 
