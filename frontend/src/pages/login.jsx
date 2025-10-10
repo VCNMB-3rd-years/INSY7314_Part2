@@ -82,7 +82,7 @@ export default function Login() {
     });
     setError('');
   };
-  const accNrPattern = "^acc\\d{9}$"; // w3schools
+  const accNrPattern = "^acc\\d{9}$"; // (w3schools,  2025)
   return (
     <div>
       <h1>Login</h1>

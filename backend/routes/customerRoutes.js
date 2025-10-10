@@ -3,8 +3,6 @@ const ExpressBrute = require('express-brute');
 const { verifyToken } = require('../middleware/authMiddleware.js')
 const {register, login, logout } = require('../controllers/customerController.js')
 
-const {register, login, deleteAll } = require('../controllers/customerController.js')
-
 
 const store = new ExpressBrute.MemoryStore(); 
 
@@ -61,7 +59,7 @@ router.post('/login',
 
 router.post('/logout', verifyToken, logout) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
 
-router.delete('/deleteAll', deleteAll)
+//router.delete('/deleteAll', deleteAll)
 
 
   //Testing puposes:
