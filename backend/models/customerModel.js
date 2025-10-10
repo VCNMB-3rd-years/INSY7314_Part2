@@ -3,46 +3,43 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
 const customerSchema = new mongoose.Schema({ //define layout of a customer object
-   fullName: { type: String, required: true, match: /^[a-zA-Z0-9\s]+$/, trim: true, minlength: 3, maxlength: 30 }, // Arunangshu Das, 2025
-    idNumber: {type: String, required: true, match: /^[0-9]+$/, trim: true, maxlength: 13 },// Arunangshu Das, 2025
-    accNumber: { type: String, required: true, match: /^acc\d{9}$/, trim: true, maxlength: 12 },// Arunangshu Das, 2025
-    userPassword: { type: String, required: true, minlength: 8, match: /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])[\S]{8,16}$/, select: false } //prevents password to be seen (Stack Overflow, 2012)
+    fullName: {type: String, required: true},
+    idNumber: {type: String, required: true},
+    accNumber: {type: String, required: true},
+    userPassword: {type: String, required: true, select: false} //prevents password to be seen (Stack Overflow, 2012)
 })
 
 //(Kumar, 2024) Hashing user's password before entering mongoose
-customerSchema.pre('save', async function (next) {
+customerSchema.pre('save', async function(next) {
     //Hashes if password is new or has been updated
-    if (!this.isModified('userPassword')) {
+    if(!this.isModified('userPassword'))
+    {
         return next();
     }
-
-    try {
+    
+    try{
         //Now SALT and HASH is generated
         const salt = await bcrypt.genSalt(10);
         this.userPassword = await bcrypt.hash(this.userPassword, salt);
         //go forward to save
         next();
     }
-    catch (error) {
+    catch(error)
+    {
         //Passes error 
         next(error);
-    }
+    } 
 })
 
 //Comparison of the login password with hashed password (Bhupendra, 2024)
-customerSchema.methods.matchPassword = async function (enterPassword) {
-    return await bcrypt.compare(enterPassword, this.userPassword);
+customerSchema.methods.matchPassword = async function(enterPassword)
+{
+     return await bcrypt.compare(enterPassword, this.userPassword);
 }
 
 const Customer = mongoose.model('Customer', customerSchema) //link customer layout ot db
 
 module.exports = Customer //rest of app gains access to this export
-
-
-
-
-
-
 
 /*
 REFERENCES
@@ -50,5 +47,4 @@ REFERENCES
 Bhupendra, 2024. Password Hashing using bcrypt. [Online] Available at: https://medium.com/@bhupendra_Maurya/password-hashing-using-bcrypt-e36f5c655e09 [Accessed 30 September 2025]
 Kumar, A. 2024. Mastering User Authentication: Building a Secure User Schema with Mongoose and Bcrypt. [Online] Available at: https://medium.com/@finnkumar6/mastering-user-authentication-building-a-secure-user-schema-with-mongoose-and-bcrypt-539b9394e5d9 [Accessed 30 September 2025]
 Stack Overflow. 2012. How to protect the password field in Mongoose/MongoDB so it won't return in a query when I populate collections? [Online] Available at:  https://stackoverflow.com/questions/12096262/how-to-protect-the-password-field-in-mongoose-mongodb-so-it-wont-return-in-a-qu [Accessed 30 September 2025]
-Arunangshu Das. 2025. 7 Best Practices for Sanitizing Input in Node.js. [online] available at: https://medium.com/devmap/7-best-practices-for-sanitizing-input-in-node-js-e61638440096 date accessed 09 October 2025
 */
