@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 const registerEmployee = async (req, res) => {
     //Information needed for registration
     try {
-
         const {
             username,
             password
@@ -20,7 +19,7 @@ const registerEmployee = async (req, res) => {
         //Checks if customer exists
         const checksIfEmployeeExists = await Employee.findOne({ username })
         if (checksIfEmployeeExists) {
-            return res.status(400).json({ message: "Customer already exists." });
+            return res.status(400).json({ message: "Employee already exists." });
         }
 
 
