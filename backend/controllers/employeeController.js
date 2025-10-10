@@ -1,6 +1,8 @@
 const Employee = require('../models/employeeModel.js')
 const generateJwt = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
+const validator = require('validator');
+const { invalidateToken } = require('../middleware/authMiddleware.js')
 
 //Registration of a Customer (post)
 const registerEmployee = async (req, res) => {

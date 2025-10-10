@@ -76,6 +76,10 @@ const verifyPayment = async(req, res) => {
     const id = req.params.id
     let {customerName, amount, currency, provider, verified} = req.body //pull payment object from frontend
 
+    if (!req.user.role === 'employee') {
+        return res.status(401).json({message: "Only employees have access to this page"})
+    }
+
     //INPUT SANITISING FOR XSS ATTACKS
     customerName = xss(customerName)
     currency = xss(currency)
@@ -113,10 +117,13 @@ const getCustomerPayments = async(req, res) => {
 //VIEW ALL PENDING PAYMENTS (get)
 const getPendingPayments = async(req, res) => {
     try {
+        // if (req.user.payload.role !== 'employee') {
+        //     return res.status(401).json({message: "Only employees have access to this page"})
+        // }
         const payments = await Payment.find({verified: false}) //pulls all objects in payment node in db
         return res.status(200).json(payments)
     }
-    catch (error) {
+    catch (error) {        
         return res.status(500).json({error: error.message})
     }
 }
