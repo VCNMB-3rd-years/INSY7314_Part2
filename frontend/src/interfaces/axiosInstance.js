@@ -6,6 +6,7 @@ export const api = axios.create({
     headers: {
         'Content-Type': 'application/json'
     },
+    withCredentials: true //sends cookies automatically between back and frontend
 })
 
 export const setAuthToken = (token) => {
@@ -14,6 +15,11 @@ export const setAuthToken = (token) => {
     } else {
         delete api.defaults.headers.common[`Authorization`];
     }
+};
+
+//LOGGING OUT WITH COOKIES SET UP
+export const logoutCustomer = async () => {
+  return axios.post('/customer/logout', {}, { withCredentials: true });
 };
 
 export default api

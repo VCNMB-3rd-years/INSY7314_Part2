@@ -128,6 +128,13 @@ const login = async (req, res) => {
             }, 
             "customer")
 
+            res.cookie('token', token, {
+                httpOnly: true, //javascript cant access the cookie so jwt is safe here
+                secure: true, // sends only over https
+                sameSite: 'Strict', //prevents crsf from different origins
+                maxAge: 3 * 60 * 60 * 1000 //3 hours until expiratiaon
+        })
+            //console.log('Cookie tracking', res.cookie.token) //TESTING, WANT TO SEE IF TOKEN STORES HERE
             return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: token });
         })
 
@@ -139,12 +146,19 @@ const login = async (req, res) => {
 
 //added so long, still need a button to connect to, maybe on portal and make payment screens?
 const logout = async(req, res) => {
-    const authHeader = req.headers['authorization'] //strip header for token value
-    const token = authHeader.split(" ")[1]
+    //const authHeader = req.headers['authorization'] //strip header for token value
+    //const token = authHeader.split(" ")[1]
+    const token = req.cookies.token
+
     if (!token) { 
         return res.status(400).json({message: "You need to be logged in before you can log out"}) //check if there is a token, if not error
     }
     invalidateToken(token) //else handle blacklisting it
+    res.clearCookie('token', { //clear out the cookie to clear out the jwt and session as well
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict'
+    })
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
 }
 

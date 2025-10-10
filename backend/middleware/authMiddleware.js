@@ -14,12 +14,13 @@ const verifyToken = (req, res, next) => {
 
     //we split after the space, as standard headers look like:
     //Bearer: <token> and we only need the tken part
-    const token = authHeader && authHeader.split(" ")[1]
+    //const token = authHeader && authHeader.split(" ")[1] //WITHOUT HTTP COOKIE
+    const token = req.cookies.token //get token from within the cookies passed to here
     console.log("Extracted Token:", token)
 
     //401 error for no token found
     if (!token) { 
-        return res.status(401).json({message: "No token"})
+        return res.status(401).json({message: "No token found in cookie"})
     }
     //token has already been logged out
     if (tokenBlacklist.has(token)) {
