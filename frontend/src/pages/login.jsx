@@ -84,66 +84,71 @@ export default function Login() {
   };
   const accNrPattern = "^acc\\d{9}$"; // (w3schools,  2025)
   return (
-    <div>
-      <h1>Login</h1>
-      <div>
-        <h3>Please fill out details below</h3>
-        {error && <p>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="fullName"
-            placeholder="Username/Full Name"
-            value={formData.fullName}
-            onChange={handleInputChange}
-            required
-          />
-          <br />
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <h1>Login</h1>
+            <div>
+                <h3>Please fill out details below</h3>
+                {error && <p className="error-message">{error}</p>}
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="fullName">Username/Full Name</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            placeholder="Username/Full Name"
+                            value={formData.fullName}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </div>
 
-{/*(GeeksforGeeks, 2025) The enable show password part*/}
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-          <input
-            type={showPassword? 'text' : 'password'}
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-            style={{ paddingRight: '40px' }}
-          />
-          <span
-              onClick={togglePasswordVisibility}
-              style={{
-                position: 'absolute',
-                right: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                cursor: 'pointer',
-              }}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
-          <br />
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <div className="password-wrapper">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                id="password"
+                                name="password"
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <span
+                            
+                              onClick={togglePasswordVisibility}
+                                className="password-toggle-icon"
+                            >
+                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                            </span>
+                        </div>
+                    </div>
 
+                    <div className="form-group">
+                        <label htmlFor="accNumber">Account Number</label>
+                        <input
+                            type="text"
+                            id="accNumber"
+                            name="accNumber"
+                            placeholder="Account Number (customers only)"
+                            value={formData.accNumber.toLowerCase()}
+                            onChange={handleInputChange}
+                            pattern={accNrPattern}
+                            title="Account number must start with 'acc' followed by 9 digits"
+                        />
+                    </div>
 
-          <input
-            type="text"
-            name="accNumber"
-            placeholder="Account Number (customers only)"
-            value={formData.accNumber.toLowerCase()}
-            onChange={handleInputChange}
-            pattern={accNrPattern}
-            title="Account number must start with 'acc' followed by 9 digits"
-          />
-          <br />
-          <button type="submit">Submit</button>
-          <button type="reset" onClick={handleReset}>Reset</button>
-        </form>
-      </div>
-    </div>
-  );
+                    <button type="submit">Submit</button>
+                    <button type="reset" onClick={handleReset}>Reset</button>
+                </form>
+            </div>
+        </div>
+    );
 }
+
+{/*(GeeksforGeeks, 2025) FOr the eye needed to see password or not
+  USed for the eye in the password to see it or not*/} 
 
 /*
 REFERENCES
