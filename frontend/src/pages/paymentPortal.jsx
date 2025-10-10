@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { getPendingPayments } from '../services/apiService.js'
+import { useNavigate } from 'react-router-dom'
 import '../App.css'
 
 export default function PaymentPortal() {
     const [pendingPayments, setPendingPayments] = useState([])
+    const navigate = useNavigate()
 
     const fetchPayments = async () => {
         try {
@@ -12,6 +14,9 @@ export default function PaymentPortal() {
             setPendingPayments(res.data)
         } catch (error) {
             console.error("Error fetching payments", error)
+            if (error.response && error.response.status === 401) {
+                navigate('/permissionDenied')
+            }
             setPendingPayments([])
         }
     }

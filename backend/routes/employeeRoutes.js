@@ -5,8 +5,17 @@ const express = require('express')
 
 const router = express.Router();
 
-const {registerEmployee, loginEmployee} = require('../controllers/employeeController.js')
+const { registerEmployee, loginEmployee } = require('../controllers/employeeController.js')
+const rateLimit = require('express-rate-limit');
 
+// Set up rate limiter: maximum of 10 requests per 3 minutes per IP this is for testing the low time
+const limiter = rateLimit({
+  windowMs: 3 * 60 * 1000,
+  max: 10,
+  message: "Too many requests from this IP, please try again after 3 minutes",
+}); // Frontend Highlights, 2024
+
+router.use(limiter)
 
 //API endpoints
 router.post('/registerEmployee', registerEmployee) //Registers the Employee

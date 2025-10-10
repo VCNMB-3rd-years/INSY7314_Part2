@@ -1,14 +1,14 @@
 const express = require('express') //import express to use methods and functionality
 
-const {createPayment, verifyPayment, getPendingPayments, getCustomerPayments, deleteAllPayments} = require('../controllers/paymentController.js') //call in necessary methods from controller
+const { createPayment, verifyPayment, getPendingPayments, getCustomerPayments, deleteAllPayments } = require('../controllers/paymentController.js') //call in necessary methods from controller
 const { verifyToken } = require('../middleware/authMiddleware.js')
 const rateLimit = require('express-rate-limit');
 
 // Set up rate limiter: maximum of 10 requests per 3 minutes per IP this is for testing the low time
 const limiter = rateLimit({
-  windowMs: 3 * 60 * 1000,
-  max: 10, 
-  message: "Too many requests from this IP, please try again after 3 minutes",
+    windowMs: 3 * 60 * 1000,
+    max: 10,
+    message: "Too many requests from this IP, please try again after 3 minutes",
 }); // Frontend Highlights, 2024
 
 
