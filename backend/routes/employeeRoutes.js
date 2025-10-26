@@ -1,11 +1,9 @@
 const express = require('express')
 
-
-
-
 const router = express.Router();
 
-const { registerEmployee, loginEmployee } = require('../controllers/employeeController.js')
+const { registerEmployee, loginEmployee,  logoutEmployee, viewAllEmployees, deleteAnEmployee } = require('../controllers/employeeController.js')
+const { verifyToken } = require('../middleware/authMiddleware.js')
 const rateLimit = require('express-rate-limit');
 
 // Set up rate limiter: maximum of 10 requests per 3 minutes per IP this is for testing the low time
@@ -20,7 +18,13 @@ router.use(limiter)
 //API endpoints
 router.post('/registerEmployee', registerEmployee) //Registers the Employee
 router.post('/loginEmployee', loginEmployee)
+router.get('/viewAllEmployees', viewAllEmployees)
+router.post('/logout', verifyToken, logoutEmployee) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
 
+router.get('/csrf-token', (req, res) => {
+    //csurf attached token to req's csrfToken
+    res.json({ csrfToken: req.csrfToken() })
+})
 
 //Testing purpose
 const Employee = require('../models/employeeModel');
@@ -31,5 +35,3 @@ router.get('/all', async (req, res) => {
 
 
 module.exports = router
-
-//Added a comment
