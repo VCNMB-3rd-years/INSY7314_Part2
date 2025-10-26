@@ -2,6 +2,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { setAuthToken, api } from '../interfaces/axiosInstance.js'
+import { refreshCsrfToken } from '../interfaces/axiosInstance.js'
 
 //create the section of memory first for remembering if user is logged in
 const AuthContext = createContext()
@@ -10,21 +11,26 @@ export function AuthProvider({children}) { //any child object this method has to
     const [isAuthenticated, setIsAuthenticated] = useState(false) //boolean variable tracking if user was authenticated and logged in (Bajgain, 2025)
     const [token, setToken] = useState(null) //start it as empty
 
-    const login = (newToken) => { 
-      setIsAuthenticated(true) //(Bajgain, 2025)
-      setToken(newToken) //set the value of the token with the new passed in token (Bajgain, 2025)
+    const login = async (newToken) => { 
+        setIsAuthenticated(true) //(Bajgain, 2025)
+        setToken(newToken) //set the value of the token with the new passed in token (Bajgain, 2025)
+        //get CSRF token immediately after login yo include token in other api calls
+        try {
+            await refreshCsrfToken(); //fresh after login
+        } catch (error) {
+            console.log('CSRF token refresh failed after login:', error);
+        }
     }
     
     const logout = async () => {
-        try{
+        try {
             await api.post('/customer/logout');
         setIsAuthenticated(false); //(Bajgain, 2025)
         setToken(null); //(Bajgain, 2025)
+        delete api.defaults.headers.common['X-CSRF-Token'];
 
         console.log("Logout was successful and session has been cleared!");
-
-        }catch (error)
-        {
+        } catch (error) {
             console.error("Logout failed:", error);
         }
     }
@@ -32,6 +38,13 @@ export function AuthProvider({children}) { //any child object this method has to
     useEffect(() => { //sets up token value in axios as it chanegs
         setAuthToken(token); //(Bajgain, 2025)
     }, [token]);
+
+    //try to get csrf token 
+    useEffect(() => {
+        refreshCsrfToken().catch(error =>
+            console.log('Failed to get CSRF token:', error)
+        );
+    }, []);
 
     return (
         //providing ino from this context to the rest of the app to check status anywhere as needed with handling login and logout on the pages //(Arya, 2023)

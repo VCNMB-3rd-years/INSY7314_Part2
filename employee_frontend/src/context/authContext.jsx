@@ -2,6 +2,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { setAuthToken, api } from '../interfaces/axiosInstance.js'
+import { csrfToken } from '../services/apiService'
 
 //create the section of memory first for remembering if user is logged in
 const AuthContext = createContext()
@@ -13,6 +14,12 @@ export function AuthProvider({children}) { //any child object this method has to
     const login = (newToken) => { 
       setIsAuthenticated(true) //(Bajgain, 2025)
       setToken(newToken) //set the value of the token with the new passed in token (Bajgain, 2025)
+        //get CSRF token immediately after login yo include token in other api calls
+        try {
+            csrfToken().catch(e => console.log('Couldnt refresh CSRF token after login', error))
+        } catch (error) {
+            console.log('CSRF token fetch failed: ', error)
+        }
     }
     
     const logout = async () => {
@@ -32,6 +39,13 @@ export function AuthProvider({children}) { //any child object this method has to
     useEffect(() => { //sets up token value in axios as it chanegs
         setAuthToken(token); //(Bajgain, 2025)
     }, [token]);
+
+    //try to get csrf token 
+    useEffect(() => {
+        csrfToken().catch(error => {
+            console.log('Failed to fetch CSRF token', error)
+        })
+    }, [])
 
     return (
         //providing ino from this context to the rest of the app to check status anywhere as needed with handling login and logout on the pages //(Arya, 2023)

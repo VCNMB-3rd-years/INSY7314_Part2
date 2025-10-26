@@ -5,9 +5,9 @@ const {connectToMongo} = require('./services/dbService.js') //to connect to db
 const paymentRoutes = require('./routes/paymentRoutes.js')
 const customerRoutes = require('./routes/customerRoutes.js')
 const employeeRoutes = require('./routes/employeeRoutes.js')
+const authRoutes = require('./routes/authRoutes.js')
 const {securityMiddleware} = require('./middleware/securityMiddleware.js')
 const https = require('https') //For the SSL certificate
-const cookieParser = require('cookie-parser')
 //fs is for file system
 const fs = require('fs')
 
@@ -24,8 +24,6 @@ app.use(express.json()) //interpret json communication throughout
 
 securityMiddleware(app) //wrap app in security middleware
 
-app.use(cookieParser()) //set up for cookie handling
-
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`) //print method requests and url
     next(); //proceed ot next incoking request
@@ -34,6 +32,8 @@ app.use((req, res, next) => {
 app.use('/v1/payments', paymentRoutes) //version the api and call in functionality from payment routes
 app.use('/v1/customer', customerRoutes)
 app.use('/v1/employee', employeeRoutes)
+app.use('/v1', authRoutes)
+
 connectToMongo() //connect to db
 
 //COMMNETED OUT FOR THE SSL CERTIFICATE
