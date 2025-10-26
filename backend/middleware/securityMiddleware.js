@@ -4,7 +4,7 @@ const csurf = require('csurf') //import csurf for csrf protection
 const cookieParser = require('cookie-parser')
 
 const corsOptions = {
-    origin: 'https://localhost:5173', //(Goode, 2025)
+    origin: ['https://localhost:5173', 'https://localhost:5174'], //(Goode, 2025)
     methods: ['GET', 'POST', 'PUT', 'DELETE'], //(Goode, 2025)
     credentials: true
 }
