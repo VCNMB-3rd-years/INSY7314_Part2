@@ -66,6 +66,11 @@ router.post('/login',
 
 router.post('/logout', verifyToken, logout) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
 
+router.get('/csrf-token', (req, res) => {
+    //csurf attached token to req's csrfToken
+    res.json({ csrfToken: req.csrfToken() })
+})
+
 //router.delete('/deleteAll', deleteAll)
 
 

@@ -104,16 +104,36 @@ try {
     }
 }
 
+//https://www.geeksforgeeks.org/node-js/rest-api-using-the-express-to-perform-crud-create-read-update-delete/
+//https://www.geeksforgeeks.org/mongodb/mongoose-findbyidanddelete-function/
+
+//added so long, still need a button to connect to, maybe on portal and make payment screens?
+const logoutEmployee = async(req, res) => {
+    //const authHeader = req.headers['authorization'] //strip header for token value
+    //const token = authHeader.split(" ")[1]
+    const token = req.cookies.token
+
+    if (!token) { 
+        return res.status(400).json({message: "You need to be logged in before you can log out"}) //check if there is a token, if not error
+    }
+    invalidateToken(token) //else handle blacklisting it
+    res.clearCookie('token', { //clear out the cookie to clear out the jwt and session as well (Ghorbanian and Postal, 2022)
+        httpOnly: true, //(Ghorbanian and Postal, 2022)
+        secure: true,
+        sameSite: 'Strict', //(Csarmiento. 8 April 2022)
+        path: '/'
+    })
+    res.clearCookie('csrfToken', { //clear the csrf token to prevent reuse //(Srivastava, 2024)
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+    })
+    res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
+}
 
 
 module.exports = {
     registerEmployee,
     loginEmployee,
-    viewAllEmployees
-
+    logoutEmployee
 }
-
-
-
-//https://www.geeksforgeeks.org/node-js/rest-api-using-the-express-to-perform-crud-create-read-update-delete/
-//https://www.geeksforgeeks.org/mongodb/mongoose-findbyidanddelete-function/

@@ -160,6 +160,11 @@ const logout = async(req, res) => {
         sameSite: 'Strict', //(Csarmiento. 8 April 2022)
         path: '/'
     })
+    res.clearCookie('csrfToken', { //clear the csrf token to prevent reuse //(Srivastava, 2024)
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+    })
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
 }
 
