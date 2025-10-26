@@ -23,40 +23,23 @@ export const logoutCustomer = async () => {
 
 
 //refresh csfr token by calling the backend endpoint 
-async function refreshCsrfToken() {
-    try {
-        const res = await fetch('https://localhost:3002/v1/csrf-token', {
-            credentials: 'include'
-        })
-        if (!res.ok) {
-            return res.error
-        }
-        const data = await res.json()
-        if (data && data.csrfToken) { //if successful, set token as a default header for axios
-            api.defaults.headers.common['X-CSRF-Token'] = data.csrfToken
-            return data.csrfToken
-        }
-    } catch (error) {
-        console.log('refreshCsrfToken error', error)
-        return null
-    }
+export const refreshCsrfToken = async () => {
+    const { data } = await api.get('/csrf-token'); //backend sets cookie snd returns token
+    api.defaults.headers.common['X-CSRF-Token'] = data.csrfToken;
+    return data.csrfToken;
 }
 
 //if a request fails with 403, try to refresh the csrf token and retry request (in case csrf didnt refresh)
 api.interceptors.response.use(
-    response => response,
-    async (error) => {
-        const { config, response } = error
-        if (response && response.status === 403 && !config._retry) {
+    res => res,
+    async err => {
+        const { config, response } = err
+        if (response?.status === 403 && !config._retry) {
             config._retry = true
-            const token = await refreshCsrfToken()
-            if (token) {
-                config.headers = config.headers || {}
-                config.headers['X-CSRF-Token'] = token
-                return api(config)
-            }
+            await refreshCsrfToken()
+            return api(config)
         }
-        return Promise.reject(error)
+        return Promise.reject(err)
     }
 )
 
