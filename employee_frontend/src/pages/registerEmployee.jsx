@@ -8,10 +8,8 @@ import icon from '../../image/icon.png'
 export default function RegisterEmployee() {
     const navigate = useNavigate(); // Initialize navigate hook
     const [formData, setFormData] = useState({
-        fullName: '',
-        idNumber: '',
-        accNumber: '',
-        userPassword: ''
+        username: '',
+        password: ''
     })
 
     const handleInputChange = (e) => {
@@ -22,12 +20,10 @@ export default function RegisterEmployee() {
         e.preventDefault()
         try {
             await registerEmployee(formData)
-            alert('Customer added')
+            alert('Employee added')
             setFormData({
-                fullName: '',
-                idNumber: '',
-                accNumber: '',
-                userPassword: ''
+                username: '',
+                password: ''
             })
             navigate('/login');
         } catch (error) {
@@ -38,16 +34,12 @@ export default function RegisterEmployee() {
 
     const handleReset = () => {
         setFormData({
-            fullName: '',
-            idNumber: '',
-            accNumber: '',
-            userPassword: ''
+            username: '',
+            password: ''
         })
     }
 
     const namePattern = "^[a-zA-Z0-9]{1,30}$" // w3schools
-    const idPattern = "^(?!.*[A-Za-z])\\d{13}$" // w3schools
-    const accNrPattern = "^acc\\d{9}$"; // w3schools
     const passwordPattern = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])[^\\s]{8,16}$"; // qho, 2023
 
     return (
@@ -60,66 +52,35 @@ export default function RegisterEmployee() {
         />
             
             
-            <h1>Customer Registration</h1>
+            <h1>Employee Registration</h1>
             <div>
                 <h3>Please fill out details below</h3>
                 <form onSubmit={handleSubmit}>
                     {/*(Ui prep, 2025) Used it to figire out how to chnage the input fields*/}
                     <div className="form-group"> 
-                        <label htmlFor="fullName">Full Name</label>
+                        <label htmlFor="username">Full Name</label>
                         <input
                             type="text"
-                            id="fullName"
-                            name="fullName"
-                            placeholder="Full Name"
-                            value={formData.fullName}
+                            id="username"
+                            name="username"
+                            placeholder="Username"
+                            value={formData.username}
                             onChange={handleInputChange}
                             required
                             pattern={namePattern}
                             title="Ensure that the name enters has no special characters in it, and between 1 and 30 characters"
                         />
                     </div>
-                        {/*(Ui prep, 2025) */}
-                    <div className="form-group">
-                        <label htmlFor="idNumber">ID Number</label>
-                        <input
-                            type="text"
-                            id="idNumber"
-                            name="idNumber"
-                            placeholder="ID Number"
-                            value={formData.idNumber}
-                            onChange={handleInputChange}
-                            required
-                            pattern={idPattern}
-                            title="ensure that the id is a lenght of 13 letters and no alphabetical characters"
-                        />
-                    </div>
-
+                        
                     {/*(Ui prep, 2025) */}
                     <div className="form-group">
-                        <label htmlFor="accNumber">Account Number</label>
-                        <input
-                            type="text"
-                            id="accNumber"
-                            name="accNumber"
-                            placeholder="e.g. acc123456789"
-                            value={formData.accNumber.toLowerCase()}
-                            onChange={handleInputChange}
-                            pattern={accNrPattern}
-                            title="Account number must start with 'acc' followed by 9 digits"
-                            required
-                        />
-                    </div>
-
-                    {/*(Ui prep, 2025) */}
-                    <div className="form-group">
-                        <label htmlFor="userPassword">Password</label>
+                        <label htmlFor="password">Password</label>
                         <input
                             type="password"
-                            id="userPassword"
-                            name="userPassword"
-                            placeholder="password"
-                            value={formData.userPassword}
+                            id="password"
+                            name="password"
+                            placeholder="Password"
+                            value={formData.password}
                             onChange={handleInputChange}
                             pattern={passwordPattern}
                             title='Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character.'
