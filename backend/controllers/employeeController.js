@@ -135,5 +135,6 @@ const logoutEmployee = async(req, res) => {
 module.exports = {
     registerEmployee,
     loginEmployee,
-    logoutEmployee
+    logoutEmployee,
+    viewAllEmployees
 }
