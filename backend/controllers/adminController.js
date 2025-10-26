@@ -19,7 +19,7 @@ const registerAdmin = async (req, res) => {
             return res.status(400).json({ message: "Enter all the fields please" })
         }
 
-        //Checks if admin exists
+        //Checks if MAIN admin exists
        const isSuperAdmin = (privilege === true || privilege === 'true');
         if (isSuperAdmin) {
             const superAdminExists = await Admin.findOne({ privilege: true });
@@ -28,6 +28,11 @@ const registerAdmin = async (req, res) => {
             }
         }
 
+        //This is just the regular admin
+        const adminExists = await Admin.findOne({ username });
+        if (adminExists) {
+            return res.status(400).json({ message: "Admin username already exists." });
+        }
 
 
         //Create a new Admin
@@ -71,7 +76,7 @@ const loginAdmin = async (req, res) => {
         }
 
         // this tries to find the user in the db based on fullName and accNumber
-        const adminData = await Admin.findOne({ username }).select('+password'); 
+        const adminData = await Admin.findOne({ username }).select('+password +privilege'); 
         if (!adminData) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
@@ -93,15 +98,37 @@ const loginAdmin = async (req, res) => {
         },
         "admin");
 
-        return res.status(200).json({ message: "Login successful", employee: safeEmployee, token: token});
+        return res.status(200).json({ message: "Admin has login successfully", admin: safeAdmin, token: token});
     }
     catch (error) {
-        console.error('Login error:', error);
-        return res.status(500).json({ message: "Server error during login" });
+        console.error(' Admin Login error:', error);
+        return res.status(500).json({ message: "Server error during Admin login" });
     }
-};
+}
+
+
+
+//added so long, still need a button to connect to, maybe on portal and make payment screens?
+const logout = async(req, res) => {
+    //const authHeader = req.headers['authorization'] //strip header for token value
+    //const token = authHeader.split(" ")[1]
+    const token = req.cookies.token
+
+    if (!token) { 
+        return res.status(400).json({message: "You need to be logged in before you can log out"}) //check if there is a token, if not error
+    }
+    invalidateToken(token) //else handle blacklisting it
+    res.clearCookie('token', { //clear out the cookie to clear out the jwt and session as well (Ghorbanian and Postal, 2022)
+        httpOnly: true, //(Ghorbanian and Postal, 2022)
+        secure: true,
+        sameSite: 'Strict', //(Csarmiento. 8 April 2022)
+        path: '/'
+    })
+    res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
+}
 
 module.exports = {
     registerAdmin,
-    loginAdmin
+    loginAdmin,
+    logout
 }

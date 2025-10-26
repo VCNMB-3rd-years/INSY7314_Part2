@@ -5,7 +5,9 @@ const {connectToMongo} = require('./services/dbService.js') //to connect to db
 const paymentRoutes = require('./routes/paymentRoutes.js')
 const customerRoutes = require('./routes/customerRoutes.js')
 const employeeRoutes = require('./routes/employeeRoutes.js')
+const adminRoutes = require('./routes/adminRoutes.js')
 const {securityMiddleware} = require('./middleware/securityMiddleware.js')
+
 const https = require('https') //For the SSL certificate
 const cookieParser = require('cookie-parser')
 //fs is for file system
@@ -34,6 +36,7 @@ app.use((req, res, next) => {
 app.use('/v1/payments', paymentRoutes) //version the api and call in functionality from payment routes
 app.use('/v1/customer', customerRoutes)
 app.use('/v1/employee', employeeRoutes)
+app.use('/v1/admin', adminRoutes)
 connectToMongo() //connect to db
 
 //COMMNETED OUT FOR THE SSL CERTIFICATE

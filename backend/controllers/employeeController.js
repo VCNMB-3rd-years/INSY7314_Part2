@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const { invalidateToken } = require('../middleware/authMiddleware.js')
 
-//Registration of a Customer (post)
+//Registration of a Employee > ONLY THE MAIN ADMIN CAN DO IT (post)
 const registerEmployee = async (req, res) => {
     //Information needed for registration
     try {
@@ -93,7 +93,49 @@ const loginEmployee = async (req, res) => {
     }
 };
 
+
+//This can be done by all admins 
+const viewAllEmployees = async (req, res) => {
+try {
+        const employees = await Employee.find().select('-password');
+        return res.status(200).json(employees);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+
+//This can be done by all admins 
+const deleteAnEmployee = async (req, res) => {
+  // get the id of the Employee we want to remove
+  const id = req.params.id;
+
+  // null check
+  if (!id) {
+    res.status(400).json({ message: "Please provide an ID to delete." });
+  }
+
+  // first try find the employee
+  try {
+    var employee = await Employee.findById(id);
+
+    // if no employee, 404 and exit the method
+    if (!employee) {
+      res.status(404).json({ message: "No book found that matches that ID." });
+    }
+
+    // find the employee, delete it, and return what it was
+    employee = await Employee.findByIdAndDelete(id);
+    res.status(202).json(employee);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
     registerEmployee,
-    loginEmployee
+    loginEmployee,
+    viewAllEmployees,
+    deleteAnEmployee
+
 }
