@@ -1,6 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const { verifyToken } = require('../middleware/authMiddleware.js')
+const ExpressBrute = require('express-brute');
 
 const {registerAdmin, loginAdmin, logout } = require('../controllers/adminController.js')
 
@@ -53,6 +54,8 @@ const router = express.Router()
 router.use(limiter)
 
 
-router.post('/register', registerAdmin);
+router.post('/registerAdmin', registerAdmin);
 router.post('/login', loginAdmin);
 router.post('/logout', verifyToken, logout)
+
+module.exports = router;

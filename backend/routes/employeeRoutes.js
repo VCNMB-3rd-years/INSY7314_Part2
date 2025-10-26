@@ -18,7 +18,6 @@ router.use(limiter)
 router.post('/registerEmployee', registerEmployee) //Registers the Employee
 router.post('/loginEmployee', loginEmployee)
 router.get('/viewAllEmployees', viewAllEmployees)
-router.delete('/deleteEmployee', deleteAnEmployee)
 
 
 //Testing purpose

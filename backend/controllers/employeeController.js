@@ -105,37 +105,15 @@ try {
 }
 
 
-//This can be done by all admins 
-const deleteAnEmployee = async (req, res) => {
-  // get the id of the Employee we want to remove
-  const id = req.params.id;
-
-  // null check
-  if (!id) {
-    res.status(400).json({ message: "Please provide an ID to delete." });
-  }
-
-  // first try find the employee
-  try {
-    var employee = await Employee.findById(id);
-
-    // if no employee, 404 and exit the method
-    if (!employee) {
-      res.status(404).json({ message: "No book found that matches that ID." });
-    }
-
-    // find the employee, delete it, and return what it was
-    employee = await Employee.findByIdAndDelete(id);
-    res.status(202).json(employee);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
 
 module.exports = {
     registerEmployee,
     loginEmployee,
-    viewAllEmployees,
-    deleteAnEmployee
+    viewAllEmployees
 
 }
+
+
+
+//https://www.geeksforgeeks.org/node-js/rest-api-using-the-express-to-perform-crud-create-read-update-delete/
+//https://www.geeksforgeeks.org/mongodb/mongoose-findbyidanddelete-function/

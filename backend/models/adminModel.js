@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose')
 
-const employeeSchema = new mongoose.Schema({ //define layout of an employee object
+const adminSchema = new mongoose.Schema({ //define layout of an employee object
     username: {type: String, required: true},
     password: {type: String, required: true, select: false}, //prevents password to be seen (Stack Overflow, 2012)
     privilege: { type: Boolean, default: false, select: false }
@@ -9,7 +9,7 @@ const employeeSchema = new mongoose.Schema({ //define layout of an employee obje
 
 
 //(Kumar, 2024) Hashing user's password before entering mongoose
-employeeSchema.pre('save', async function(next) {
+adminSchema.pre('save', async function(next) {
     //Hashes if password is new or has been updated
     if(!this.isModified('password'))
     {
