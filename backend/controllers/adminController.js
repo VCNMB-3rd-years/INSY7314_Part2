@@ -127,6 +127,9 @@ const logout = async(req, res) => {
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
 }
 
+// delete a employee (Username)
+
+
 module.exports = {
     registerAdmin,
     loginAdmin,
