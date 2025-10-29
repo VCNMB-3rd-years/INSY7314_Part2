@@ -5,3 +5,4 @@ export const getProcessedPayments = () => api.get('/paymentHistory')
 export const registerEmployee = (employee) => api.post('/employee/registerEmployee', employee)
 export const loginCustomer = (customer) => api.post('/customer/login', customer)
 export const loginEmployee = (employee) => api.post('/employee/loginEmployee', employee)
+export const loginAdmin = (admin) => api.post('/admin/login', admin);
