@@ -15,7 +15,7 @@ const checkAuthStatus = async () => {
         //if request has status 200 for success, token was valid
         return true; 
     } catch (error) {
-        //if 401 or 403 returns), the token is invalid
+        //if 401 or 403 returns, the token is invalid
         return false;
     }
 };
@@ -28,8 +28,14 @@ export function AuthProvider({children}) { //any child object this method has to
     useEffect(() => { 
         const loadUser = async () => {
             const status = await checkAuthStatus();
-            setIsAuthenticated(status); //set autheticated to value returned by status method above
-            setIsLoading(false); //stop loading after check
+            
+            if (status) { //if valid token
+                setIsAuthenticated(true); //authenticate user
+            } else {
+                await logout(); //else logout
+            }
+            
+            setIsLoading(false); // stop loading after check
         };
         
         loadUser();
