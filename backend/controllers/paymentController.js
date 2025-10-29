@@ -47,7 +47,7 @@ const createPayment = async(req, res) => {
     }
 
     if (!validator.matches(sanitizedSwiftCode, /^([a-zA-Z]{4})[-\s]?([a-zA-Z]{2})[-\s]?([0-9a-zA-Z]{2})([-\s]?[0-9a-zA-Z]{3})?$/)) { //(Klesun, 2024)
-        return res.status(400).json({ message: "Provider must only contain letters, numbers, and spaces" });
+        return res.status(400).json({ message: "Swift Code format must follow: AAAA-BB-CC-123)." });
     }
 
     if (req.user.payload.fullName !== sanitizedName || req.user.payload.accNumber !== sanitizedAccNumber) {

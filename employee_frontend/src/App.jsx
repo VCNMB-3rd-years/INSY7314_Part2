@@ -7,6 +7,7 @@ import Login from './pages/login.jsx'
 import Navbar from './components/Navbar.jsx'
 import PermissionDenied from './pages/permissionDenied.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import PaymentHistory from './pages/paymentHistory.jsx';
 
 function App() {
   return (
@@ -15,9 +16,10 @@ function App() {
         <div className="page-container">
       <Routes>
         <Route path="/" element={<WelcomePage />} />
-        <Route path="/paymentPortal" element={<ProtectedRoute> <PaymentPortal /> </ProtectedRoute>} />
-        <Route path="/register" element={ <ProtectedRoute> <RegisterEmployee /> </ProtectedRoute>} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={ <ProtectedRoute> <RegisterEmployee /> </ProtectedRoute>} />
+        <Route path="/paymentPortal" element={<ProtectedRoute> <PaymentPortal /> </ProtectedRoute>} />
+        <Route path="/paymentHistory" element={ <ProtectedRoute> <PaymentHistory /> </ProtectedRoute>} />
         <Route path="/permissionDenied" element={<PermissionDenied/>} />
       </Routes> 
       </div>  

@@ -3,7 +3,7 @@ import { getProcessedPayments, verifyPayment } from '../services/apiService.js'
 import { useNavigate } from 'react-router-dom'
 import '../App.css'
 
-export default function PaymentPortal() {
+export default function PaymentHistory() {
     const [processedPayments, setProcessedPayments] = useState([])
     const navigate = useNavigate()
 
@@ -19,20 +19,6 @@ export default function PaymentPortal() {
             }
             setProcessedPayments([])
         }
-    }
-
-    const handleVerify = async (e) => {
-        e.preventDefault()
-        await verifyPayment(e.target.value, updatePayment)
-        alert('Payment verified!')
-        fetchPayments()
-    }
-
-    const handleReject = async (e) => {
-        e.preventDefault()
-        await verifyPayment(e.target.value, updatePayment)
-        alert('Payment rejected!')
-        fetchPayments()
     }
 
     useEffect(() => {
@@ -51,8 +37,7 @@ export default function PaymentPortal() {
                             <th>Provider</th>
                             <th>Currency</th>
                             <th>Amount</th>
-                            <th>Current Status</th>
-                            <th>Verify</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,10 +55,6 @@ export default function PaymentPortal() {
                                 <td>{payment.currency}</td>
                                 <td>{payment.amount}</td>
                                 <td>{payment.verified}</td>
-                                <td>
-                                    <button onClick={{handleVerify}}>Verify</button>
-                                    <button onClick={{handleReject}}>Reject</button>
-                                </td>
                             </tr>
                         ))}
                     </tbody>
