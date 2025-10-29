@@ -134,12 +134,6 @@ const login = async (req, res) => {
                 sameSite: 'Strict', //prevents crsf from different origins (Csarmiento. 8 April 2022)
                 maxAge: 3 * 60 * 60 * 1000 //3 hours until expiratiaon (Csarmiento. 8 April 2022)
             })
-            res.cookie('csrfToken', token, { //(Ghorbanian and Postal, 2022)
-                httpOnly: false,
-                secure: true, // sends only over https 
-                sameSite: 'Strict', //prevents crsf from different origins (Csarmiento. 8 April 2022)
-                maxAge: 3 * 60 * 60 * 1000 //3 hours until expiratiaon (Csarmiento. 8 April 2022)
-            })
             //console.log('Cookie tracking', res.cookie.token) //TESTING, WANT TO SEE IF TOKEN STORES HERE
             return res.status(200).json({ message: "Login successful", customer: safeCustomer, token: token });
         })
@@ -165,11 +159,6 @@ const logout = async(req, res) => {
         secure: true,
         sameSite: 'Strict', //(Csarmiento. 8 April 2022)
         path: '/'
-    })
-    res.clearCookie('csrfToken', { //clear the csrf token to prevent reuse //(Srivastava, 2024)
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
     })
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
 }
