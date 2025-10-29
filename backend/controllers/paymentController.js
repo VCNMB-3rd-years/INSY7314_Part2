@@ -87,7 +87,7 @@ const verifyPayment = async(req, res) => {
     provider = xss(provider)
 
     try {
-        const payment = await Payment.findByIdAndUpdate(id, {verified}, {new: "VERIFIED"}) //find the payment from the db and update where verified field updates
+        const payment = await Payment.findByIdAndUpdate(id, {verified: "VERIFIED"}, {new: true}) //find the payment from the db and update where verified field updates
 
         if (!payment) { //payment not found
             return res.status(404).json({message: "There is no payment here"})
@@ -115,7 +115,7 @@ const rejectPayment = async(req, res) => {
     provider = xss(provider)
 
     try {
-        const payment = await Payment.findByIdAndUpdate(id, {verified}, {new: "REJECTED"}) //find the payment from the db and update where verified field updates
+        const payment = await Payment.findByIdAndUpdate(id, {verified: "REJECTED"}, {new: true}) //find the payment from the db and update where verified field updates
 
         if (!payment) { //payment not found
             return res.status(404).json({message: "There is no payment here"})

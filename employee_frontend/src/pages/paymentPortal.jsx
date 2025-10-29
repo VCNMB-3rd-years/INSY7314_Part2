@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getPendingPayments } from '../services/apiService.js'
+import { getPendingPayments, verifyPayment, rejectPayment } from '../services/apiService.js'
 import { useNavigate } from 'react-router-dom'
 import '../App.css'
 
@@ -31,7 +31,7 @@ export default function PaymentPortal() {
 
     const handleReject = async (e) => {
         e.preventDefault()
-        await verifyPayment(e.target.value, updatePayment)
+        await rejectPayment(e.target.value, updatePayment)
         alert('Payment rejected!')
         fetchPayments()
     }
@@ -72,8 +72,8 @@ export default function PaymentPortal() {
                                 <td>{payment.amount}</td>
                                 <td>{payment.verified}</td>
                                 <td>
-                                    <button onClick={{ handleVerify }}>Verify</button>
-                                    <button onClick={{ handleReject }}>Reject</button>
+                                    <button onClick={handleVerify}>Verify</button>
+                                    <button onClick={handleReject}>Reject</button>
                                 </td>
                             </tr>
                         ))}
