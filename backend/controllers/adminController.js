@@ -99,6 +99,13 @@ const loginAdmin = async (req, res) => {
         },
         "admin");
 
+        res.cookie('token', token, { //(Ghorbanian and Postal, 2022)
+                httpOnly: true, //javascript cant access the cookie so jwt is safe here (Ghorbanian and Postal, 2022)
+                secure: true, // sends only over https 
+                sameSite: 'Strict', //prevents crsf from different origins (Csarmiento. 8 April 2022)
+                maxAge: 3 * 60 * 60 * 1000 //3 hours until expiratiaon (Csarmiento. 8 April 2022)
+        })
+
         return res.status(200).json({ message: "Admin has login successfully", admin: safeAdmin, token: token});
     }
     catch (error) {

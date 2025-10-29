@@ -85,6 +85,13 @@ const loginEmployee = async (req, res) => {
             },
         "employee")
 
+        res.cookie('token', token, { //(Ghorbanian and Postal, 2022)
+                httpOnly: true, //javascript cant access the cookie so jwt is safe here (Ghorbanian and Postal, 2022)
+                secure: true, // sends only over https 
+                sameSite: 'Strict', //prevents crsf from different origins (Csarmiento. 8 April 2022)
+                maxAge: 3 * 60 * 60 * 1000 //3 hours until expiratiaon (Csarmiento. 8 April 2022)
+        })
+
         return res.status(200).json({ message: "Login successful", employee: safeEmployee, token: token});
     }
     catch (error) {
@@ -122,11 +129,6 @@ const logoutEmployee = async(req, res) => {
         secure: true,
         sameSite: 'Strict', //(Csarmiento. 8 April 2022)
         path: '/'
-    })
-    res.clearCookie('csrfToken', { //clear the csrf token to prevent reuse //(Srivastava, 2024)
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
     })
     res.status(200).json({message: "Logged out successfully"}) //when succesful, log them out
 }

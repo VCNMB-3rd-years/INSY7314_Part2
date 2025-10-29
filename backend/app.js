@@ -6,7 +6,6 @@ const paymentRoutes = require('./routes/paymentRoutes.js')
 const customerRoutes = require('./routes/customerRoutes.js')
 const employeeRoutes = require('./routes/employeeRoutes.js')
 const adminRoutes = require('./routes/adminRoutes.js')
-const authRoutes = require('./routes/authRoutes.js')
 const {securityMiddleware} = require('./middleware/securityMiddleware.js')
 
 const https = require('https') //For the SSL certificate
@@ -35,7 +34,6 @@ app.use('/v1/payments', paymentRoutes) //version the api and call in functionali
 app.use('/v1/customer', customerRoutes)
 app.use('/v1/employee', employeeRoutes)
 app.use('/v1/admin', adminRoutes)
-app.use('/v1', authRoutes)
 
 connectToMongo() //connect to db
 

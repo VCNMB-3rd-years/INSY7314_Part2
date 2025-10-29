@@ -54,6 +54,7 @@ const createPayment = async(req, res) => {
         return res.status(403).json({message: "Customer details don't match logged in user credentials" })
     }
 
+    //when payment is created, default to pending status
     try {
         const payment = await Payment.create({
             customerName: sanitizedName, 
@@ -62,7 +63,7 @@ const createPayment = async(req, res) => {
             currency: sanitizedCurrency.toUpperCase(), 
             provider: sanitizedProvider.toUpperCase(), 
             swiftCode: sanitizedSwiftCode.toUpperCase(),
-            verified: false}) //create the payment object with THE SANITIZED INPUTS
+            verified: "PENDING"}) //create the payment object with THE SANITIZED INPUTS
 
         return res.status(201).json({message: "Payment created successfully.", payment: payment}) //returnt that the object was created and logged in db
     }
@@ -86,7 +87,35 @@ const verifyPayment = async(req, res) => {
     provider = xss(provider)
 
     try {
-        const payment = await Payment.findByIdAndUpdate(id, {verified}, {new: true}) //find the payment from the db and update where verified field updates
+        const payment = await Payment.findByIdAndUpdate(id, {verified}, {new: "VERIFIED"}) //find the payment from the db and update where verified field updates
+
+        if (!payment) { //payment not found
+            return res.status(404).json({message: "There is no payment here"})
+        }
+        
+        return res.status(202).json(payment) //return the updated payment
+    }
+    catch (error) {
+        res.status(500).json({error: error.message}) //if anythign goes wrong, return eror detauls
+    }
+}
+
+//REJECT PAYMENT (put)
+const rejectPayment = async(req, res) => {
+    const id = req.params.id
+    let {customerName, amount, currency, provider, verified} = req.body //pull payment object from frontend
+
+    if (!req.user.role === 'employee') {
+        return res.status(401).json({message: "Only employees have access to this page"})
+    }
+
+    //INPUT SANITISING FOR XSS ATTACKS
+    customerName = xss(customerName)
+    currency = xss(currency)
+    provider = xss(provider)
+
+    try {
+        const payment = await Payment.findByIdAndUpdate(id, {verified}, {new: "REJECTED"}) //find the payment from the db and update where verified field updates
 
         if (!payment) { //payment not found
             return res.status(404).json({message: "There is no payment here"})
@@ -120,7 +149,21 @@ const getPendingPayments = async(req, res) => {
         // if (req.user.payload.role !== 'employee') {
         //     return res.status(401).json({message: "Only employees have access to this page"})
         // }
-        const payments = await Payment.find({verified: false}) //pulls all objects in payment node in db
+        const payments = await Payment.find({verified: "PENDING"}) //pulls all objects in payment node in db
+        return res.status(200).json(payments)
+    }
+    catch (error) {        
+        return res.status(500).json({error: error.message})
+    }
+}
+
+//VIEW ALL PAST PAYMENTS (get)
+const getProcessedPayments = async(req, res) => {
+    try {
+        // if (req.user.payload.role !== 'employee') {
+        //     return res.status(401).json({message: "Only employees have access to this page"})
+        // }
+        const payments = await Payment.find(!{verified: "PENDING"}) //pulls all objects in payment node in db that have been processed before
         return res.status(200).json(payments)
     }
     catch (error) {        
@@ -141,7 +184,9 @@ const deleteAllPayments = async (req, res) => {
 module.exports = {
     createPayment, 
     verifyPayment,
+    rejectPayment,
     getPendingPayments,
+    getProcessedPayments,
     getCustomerPayments,
     deleteAllPayments
 }

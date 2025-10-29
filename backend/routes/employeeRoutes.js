@@ -21,11 +21,6 @@ router.post('/loginEmployee', loginEmployee)
 router.get('/viewAllEmployees', viewAllEmployees)
 router.post('/logout', verifyToken, logoutEmployee) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
 
-router.get('/csrf-token', (req, res) => {
-    //csurf attached token to req's csrfToken
-    res.json({ csrfToken: req.csrfToken() })
-})
-
 //Testing purpose
 const Employee = require('../models/employeeModel');
 router.get('/all', async (req, res) => {
