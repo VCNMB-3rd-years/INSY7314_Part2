@@ -120,9 +120,10 @@ const logoutEmployee = async(req, res) => {
     //const token = authHeader.split(" ")[1]
     const token = req.cookies.token
 
-    if (!token) { 
-        return res.status(400).json({message: "You need to be logged in before you can log out"}) //check if there is a token, if not error
+    if (token) { 
+        invalidateToken(token) //blacklist token 
     }
+
     invalidateToken(token) //else handle blacklisting it
     res.clearCookie('token', { //clear out the cookie to clear out the jwt and session as well (Ghorbanian and Postal, 2022)
         httpOnly: true, //(Ghorbanian and Postal, 2022)

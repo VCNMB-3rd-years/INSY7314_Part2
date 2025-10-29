@@ -64,7 +64,7 @@ router.post('/login',
 		}
 	}), login); // Logs the customer in
 
-router.post('/logout', verifyToken, logout) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
+router.post('/logout', logout) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
 
 //router.delete('/deleteAll', deleteAll)
 

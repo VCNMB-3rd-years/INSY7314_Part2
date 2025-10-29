@@ -1,24 +1,38 @@
 import { useEffect, useState } from 'react'
-import { getPendingPayments } from '../services/apiService.js'
+import { getProcessedPayments, verifyPayment } from '../services/apiService.js'
 import { useNavigate } from 'react-router-dom'
 import '../App.css'
 
 export default function PaymentPortal() {
-    const [pendingPayments, setPendingPayments] = useState([])
+    const [processedPayments, setProcessedPayments] = useState([])
     const navigate = useNavigate()
 
     const fetchPayments = async () => {
         try {
-            const res = await getPendingPayments()
+            const res = await getProcessedPayments()
             console.log("api response: ", res)
-            setPendingPayments(res.data)
+            setProcessedPayments(res.data)
         } catch (error) {
             console.error("Error fetching payments", error)
             if (error.response && error.response.status === 401) {
                 navigate('/permissionDenied')
             }
-            setPendingPayments([])
+            setProcessedPayments([])
         }
+    }
+
+    const handleVerify = async (e) => {
+        e.preventDefault()
+        await verifyPayment(e.target.value, updatePayment)
+        alert('Payment verified!')
+        fetchPayments()
+    }
+
+    const handleReject = async (e) => {
+        e.preventDefault()
+        await verifyPayment(e.target.value, updatePayment)
+        alert('Payment rejected!')
+        fetchPayments()
     }
 
     useEffect(() => {
@@ -29,7 +43,7 @@ export default function PaymentPortal() {
         <div>
             <h1>Payment Portal</h1>
             <div>
-                <h3>Pending Verification</h3>
+                <h3>Payment History</h3>
                 <table border="1">
                     <thead>
                         <tr>
@@ -37,25 +51,28 @@ export default function PaymentPortal() {
                             <th>Provider</th>
                             <th>Currency</th>
                             <th>Amount</th>
+                            <th>Current Status</th>
                             <th>Verify</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {pendingPayments.length === 0 && (
+                        {processedPayments.length === 0 && (
                             <tr>
-                                <td colSpan="5">
+                                <td colSpan="6">
                                     No payments in database
                                 </td>
                             </tr>
                         )}
-                        {pendingPayments.map( payment => (
+                        {processedPayments.map(payment => (
                             <tr key={payment._id}>
                                 <td>{payment.customerName}</td>
                                 <td>{payment.provider}</td>
                                 <td>{payment.currency}</td>
                                 <td>{payment.amount}</td>
+                                <td>{payment.verified}</td>
                                 <td>
-                                    <button onClick={() => {}}>Verify</button>
+                                    <button onClick={{handleVerify}}>Verify</button>
+                                    <button onClick={{handleReject}}>Reject</button>
                                 </td>
                             </tr>
                         ))}

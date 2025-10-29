@@ -6,7 +6,7 @@ import WelcomePage from './pages/welcomePage.jsx'
 import Login from './pages/login.jsx'
 import Navbar from './components/Navbar.jsx'
 import PermissionDenied from './pages/permissionDenied.jsx';
-import ProtectedRoute from './components/protectedRoute.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 function App() {
   return (

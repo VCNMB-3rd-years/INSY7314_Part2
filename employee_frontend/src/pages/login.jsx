@@ -41,7 +41,7 @@ export default function EmployeeLogin() {
       login(token);                       // store JWT
       console.log('Admin login success:', admin);
 
-      navigate('/registerEmployee');
+      navigate('/register');
       setFormData({ username: '', password: '' });
       return;
     } catch (adminErr) {
