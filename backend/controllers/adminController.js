@@ -1,4 +1,5 @@
 const Admin = require('../models/adminModel.js')
+const Employee = require('../models/employeeModel.js')
 const generateJwt = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
@@ -135,10 +136,36 @@ const logout = async(req, res) => {
 }
 
 // delete a employee (Username)
+const deleteEmployee = async (req, res) => {
+    try {
+        const { username } = req.body;
 
+        // Validate input
+        if (!username) {
+            return res.status(400).json({ message: "Username is required" });
+        }
+
+        // Sanitize username
+        const sanitizedUsername = validator.escape(username?.toString() || '');
+
+        // Find and delete the employee
+        const employee = await Employee.findOneAndDelete({ username: sanitizedUsername });
+        if (!employee) {
+            return res.status(404).json({ message: "Employee not found" });
+        }
+
+        // Log deletion for auditing
+        console.log(`Employee ${sanitizedUsername} deleted by admin ${req.user.username}`);
+        return res.status(200).json({ message: "Employee deleted successfully" });
+    } catch (error) {
+        console.error('Delete employee error:', error);
+        return res.status(500).json({ message: "Server error during employee deletion" });
+    }
+};
 
 module.exports = {
     registerAdmin,
     loginAdmin,
-    logout
+    logout,
+    deleteEmployee
 }
