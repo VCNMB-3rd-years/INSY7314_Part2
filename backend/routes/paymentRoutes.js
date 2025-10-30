@@ -16,8 +16,8 @@ const router = express.Router() //set up a router instance
 router.use(limiter) // Frontend Highlights, 2024
 
 //API ENDPOINTS
-router.get('/', getPendingPayments) //returns all pending payments
-router.get('/paymentHistory', getProcessedPayments) //returns all past payments
+router.get('/', verifyToken, getPendingPayments) //returns all pending payments
+router.get('/paymentHistory', verifyToken, getProcessedPayments) //returns all past payments
 router.get('/customer', verifyToken, getCustomerPayments) //verify logged in user and pull all their payments
 router.post('/', verifyToken, createPayment) //accepts new payment object
 router.put('/:id/verify', verifyToken, verifyPayment) //verifies an existing payment

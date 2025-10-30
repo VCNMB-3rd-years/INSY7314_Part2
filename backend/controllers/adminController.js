@@ -55,7 +55,7 @@ const registerAdmin = async (req, res) => {
     }
 }
 
-//Login of a Employee 
+//Login of an admin
 const loginAdmin = async (req, res) => {
     try {
         const { 

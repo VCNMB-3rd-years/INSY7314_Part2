@@ -52,7 +52,7 @@ export default function CustomerPayments() {
                                 <td>{payment.provider}</td>
                                 <td>{payment.currency}</td>
                                 <td>{payment.amount}</td>
-                                <td>{payment.verified? "Verified" : "Pending"}</td>
+                                <td>{payment.verified}</td>
                             </tr>
                         ))}
                     </tbody>

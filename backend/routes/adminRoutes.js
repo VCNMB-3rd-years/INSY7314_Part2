@@ -49,7 +49,7 @@ router.use(limiter);
 // Routes
 router.post('/registerAdmin', registerAdmin);
 router.post('/login', loginAdmin);
-router.post('/logout', verifyToken, logout);
+router.post('/logout', logout);
 router.delete('/deleteEmployee', verifyToken, deleteEmployee);
 
 module.exports = router;
