@@ -7,7 +7,7 @@ const { registerAdmin, loginAdmin, logout, deleteEmployee } = require('../contro
 // Set up rate limiter: maximum of 10 requests per 3 minutes per IP
 const limiter = rateLimit({
     windowMs: 3 * 60 * 1000,
-    max: 10,
+    max: 100,
     message: "Too many requests from this IP, please try again after 3 minutes",
 });
 
