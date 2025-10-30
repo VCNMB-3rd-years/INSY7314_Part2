@@ -41,14 +41,13 @@ export default function EmployeeLogin() {
       login(token);                       // store JWT
       console.log('Admin login success:', admin);
 
-      navigate('/register');
+      navigate('/allEmployees');
       setFormData({ username: '', password: '' });
       return;
     } catch (adminErr) {
       // Only continue if the error is "Invalid credentials"
       const msg = adminErr.response?.data?.message;
       if (msg !== 'Invalid credentials') {
-        // Real server error → stop
         setError(msg || adminErr.message || 'Admin login failed');
         return;
       }

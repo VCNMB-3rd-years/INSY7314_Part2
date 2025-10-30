@@ -8,6 +8,7 @@ import Navbar from './components/Navbar.jsx'
 import PermissionDenied from './pages/permissionDenied.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import PaymentHistory from './pages/paymentHistory.jsx';
+import AllEmployees from './pages/allEmployees.jsx'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/paymentPortal" element={<ProtectedRoute> <PaymentPortal /> </ProtectedRoute>} />
         <Route path="/paymentHistory" element={ <ProtectedRoute> <PaymentHistory /> </ProtectedRoute>} />
         <Route path="/permissionDenied" element={<PermissionDenied/>} />
+        <Route path="/allEmployees" element={<AllEmployees />} />
       </Routes> 
       </div>  
     </Router>
