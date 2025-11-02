@@ -27,9 +27,9 @@ export default function PaymentHistory() {
 
     return(
         <div>
-            <h1>Payment Portal</h1>
+            <h1>Payment History</h1>
             <div>
-                <h3>Payment History</h3>
+                <h3> All Processed Payments</h3>
                 <table border="1">
                     <thead>
                         <tr>
