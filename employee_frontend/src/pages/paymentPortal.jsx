@@ -22,18 +22,26 @@ export default function PaymentPortal() {
         }
     }
 
-    const handleVerify = async (e) => {
-        e.preventDefault()
-        await verifyPayment(e.target.value, updatePayment)
-        alert('Payment verified!')
-        fetchPayments()
+    const handleVerify = async (id) => {
+        try {
+            await verifyPayment(id)
+            alert('Payment verified!')
+            fetchPayments()
+        } catch (error) {
+            console.error("Error verifying payment", error)
+            alert('Failed to verify payment.')
+        }
     }
 
-    const handleReject = async (e) => {
-        e.preventDefault()
-        await rejectPayment(e.target.value, updatePayment)
-        alert('Payment rejected!')
-        fetchPayments()
+    const handleReject = async (id) => {
+        try {
+            await rejectPayment(id)
+            alert('Payment rejected!')
+            fetchPayments()
+        } catch (error) {
+            console.error("Error rejecting payment", error)
+            alert('Failed to reject payment.') 
+        }
     }
 
     useEffect(() => {
@@ -72,8 +80,8 @@ export default function PaymentPortal() {
                                 <td>{payment.amount}</td>
                                 <td>{payment.verified}</td>
                                 <td>
-                                    <button onClick={handleVerify}>Verify</button>
-                                    <button onClick={handleReject}>Reject</button>
+                                    <button onClick={() => handleVerify(payment._id)}>Verify</button>
+                                    <button onClick={() => handleReject(payment._id)}>Reject</button>
                                 </td>
                             </tr>
                         ))}

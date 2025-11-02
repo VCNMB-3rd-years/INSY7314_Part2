@@ -77,7 +77,7 @@ const verifyPayment = async(req, res) => {
     const id = req.params.id
     let {customerName, amount, currency, provider, verified} = req.body //pull payment object from frontend
 
-    if (!req.user.role === 'employee') {
+if (req.user.role !== 'employee' && req.user.role !== 'admin') {
         return res.status(401).json({message: "Only employees have access to this page"})
     }
 
@@ -96,6 +96,7 @@ const verifyPayment = async(req, res) => {
         return res.status(202).json(payment) //return the updated payment
     }
     catch (error) {
+        console.log(`Error verifying payment: ${error}`);
         res.status(500).json({error: error.message}) //if anythign goes wrong, return eror detauls
     }
 }
@@ -105,7 +106,7 @@ const rejectPayment = async(req, res) => {
     const id = req.params.id
     let {customerName, amount, currency, provider, verified} = req.body //pull payment object from frontend
 
-    if (!req.user.role === 'employee') {
+    if (req.user.role !== 'employee' && req.user.role !== 'admin') {
         return res.status(401).json({message: "Only employees have access to this page"})
     }
 
@@ -124,6 +125,7 @@ const rejectPayment = async(req, res) => {
         return res.status(202).json(payment) //return the updated payment
     }
     catch (error) {
+        console.log(`Error rejecting payment: ${error}`);
         res.status(500).json({error: error.message}) //if anythign goes wrong, return eror detauls
     }
 }
@@ -146,9 +148,9 @@ const getCustomerPayments = async(req, res) => {
 //VIEW ALL PENDING PAYMENTS (get)
 const getPendingPayments = async(req, res) => {
     try {
-        // if (req.user.payload.role !== 'employee') {
-        //     return res.status(401).json({message: "Only employees have access to this page"})
-        // }
+        if (req.user.role !== 'employee' && req.user.role !== 'admin') {
+            return res.status(401).json({message: "Only employees have access to this page"})
+        }
         const payments = await Payment.find({verified: "PENDING"}) //pulls all objects in payment node in db
         return res.status(200).json(payments)
     }
@@ -160,10 +162,10 @@ const getPendingPayments = async(req, res) => {
 //VIEW ALL PAST PAYMENTS (get)
 const getProcessedPayments = async(req, res) => {
     try {
-        // if (req.user.payload.role !== 'employee') {
-        //     return res.status(401).json({message: "Only employees have access to this page"})
-        // }
-        const payments = await Payment.find(!{verified: "PENDING"}) //pulls all objects in payment node in db that have been processed before
+        if (req.user.role !== 'employee' && req.user.role !== 'admin') {
+            return res.status(401).json({message: "Only employees have access to this page"})
+        }
+        const payments = await Payment.find({ verified: { $ne: "PENDING" } }) //pulls all objects in payment node in db that have been processed before ie not pending (BMC Software, 2021)
         return res.status(200).json(payments)
     }
     catch (error) {        
@@ -193,6 +195,7 @@ module.exports = {
 
 /*
 REFERENCES:
+    BMC Software. 24 April 2021. 23 Common MongoDB Query Operators & How to Use Them. [Online]. Available at: <https://www.bmc.com/blogs/mongodb-operators/> [Accessed 2 November 2025]
     Klesun. 28 June 2024. What is proper RegEx expression for SWIFT codes? [Online]. Available at: <https://stackoverflow.com/questions/3028150/what-is-proper-regex-expression-for-swift-codes> [Accessed 9 October 2025]
     W3Schools. 2025. RegExp Character Classes. [online]  available at: https://www.w3schools.com/js/js_regexp_characters.asp date accessed date 09 October 2025
 */
