@@ -51,7 +51,7 @@ export default function EmployeeLogin() {
         setError(msg || adminErr.message || 'Admin login failed');
         return;
       }
-    }
+    } 
 
     try {
       const empRes = await loginEmployee({
