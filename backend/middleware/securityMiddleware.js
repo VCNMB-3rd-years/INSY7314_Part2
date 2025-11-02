@@ -23,7 +23,7 @@ const securityMiddleware = (app) => {
 app.use(cookieParser()) //(Srivastava, 2024)
 
 app.use(helmet({ //(NpmJs, 2025)
-    //(Stack Overflow, 2019 )
+    //(Stack Overflow, 2019 ) The users will only communicate with the site over HTTPS
     hsts: {
         maxAge: 31536000, //Max age is 1 year (Hodges, 2012; Mozilla, 2025)
     },
