@@ -7,7 +7,7 @@ const rateLimit = require('express-rate-limit');
 // Set up rate limiter: maximum of 10 requests per 3 minutes per IP this is for testing the low time
 const limiter = rateLimit({
 	windowMs: 3 * 60 * 1000,
-	max: 10,
+	max: 100,
 	message: "Too many requests from this IP, please try again after 3 minutes",
 }); // Frontend Highlights, 2024
 
@@ -64,12 +64,7 @@ router.post('/login',
 		}
 	}), login); // Logs the customer in
 
-router.post('/logout', verifyToken, logout) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
-
-router.get('/csrf-token', (req, res) => {
-    //csurf attached token to req's csrfToken
-    res.json({ csrfToken: req.csrfToken() })
-})
+router.post('/logout', logout) //DEFINITELY HAVE TO IMPLEMENT A LOGOUT FUNCTION
 
 //router.delete('/deleteAll', deleteAll)
 

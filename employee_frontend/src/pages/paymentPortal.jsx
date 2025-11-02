@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { getPendingPayments } from '../services/apiService.js'
+import { getPendingPayments, verifyPayment, rejectPayment } from '../services/apiService.js'
 import { useNavigate } from 'react-router-dom'
 import '../App.css'
 
 export default function PaymentPortal() {
     const [pendingPayments, setPendingPayments] = useState([])
+    const [updatePayment, setUpdatePayment] = useState([])
     const navigate = useNavigate()
 
     const fetchPayments = async () => {
@@ -21,15 +22,37 @@ export default function PaymentPortal() {
         }
     }
 
+    const handleVerify = async (id) => {
+        try {
+            await verifyPayment(id)
+            alert('Payment verified!')
+            fetchPayments()
+        } catch (error) {
+            console.error("Error verifying payment", error)
+            alert('Failed to verify payment.')
+        }
+    }
+
+    const handleReject = async (id) => {
+        try {
+            await rejectPayment(id)
+            alert('Payment rejected!')
+            fetchPayments()
+        } catch (error) {
+            console.error("Error rejecting payment", error)
+            alert('Failed to reject payment.') 
+        }
+    }
+
     useEffect(() => {
         fetchPayments() //finish getting data from api in the background
     }, []) //this method returns nothing so []
 
-    return(
+    return (
         <div>
             <h1>Payment Portal</h1>
             <div>
-                <h3>Pending Verification</h3>
+                <h3>Payment History</h3>
                 <table border="1">
                     <thead>
                         <tr>
@@ -37,25 +60,28 @@ export default function PaymentPortal() {
                             <th>Provider</th>
                             <th>Currency</th>
                             <th>Amount</th>
+                            <th>Current Status</th>
                             <th>Verify</th>
                         </tr>
                     </thead>
                     <tbody>
                         {pendingPayments.length === 0 && (
                             <tr>
-                                <td colSpan="5">
+                                <td colSpan="6">
                                     No payments in database
                                 </td>
                             </tr>
                         )}
-                        {pendingPayments.map( payment => (
+                        {pendingPayments.map(payment => (
                             <tr key={payment._id}>
                                 <td>{payment.customerName}</td>
                                 <td>{payment.provider}</td>
                                 <td>{payment.currency}</td>
                                 <td>{payment.amount}</td>
+                                <td>{payment.verified}</td>
                                 <td>
-                                    <button onClick={() => {}}>Verify</button>
+                                    <button onClick={() => handleVerify(payment._id)}>Verify</button>
+                                    <button onClick={() => handleReject(payment._id)}>Reject</button>
                                 </td>
                             </tr>
                         ))}

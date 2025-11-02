@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { loginEmployee } from '../services/apiService.js';
+import { loginEmployee, loginAdmin } from '../services/apiService.js';
 import { useAuth } from '../context/authContext.jsx';
 import '../App.css';
 
 export default function EmployeeLogin() {
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -20,12 +21,7 @@ export default function EmployeeLogin() {
     setError('');
   };
 
-
-//toggle needed
- const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,43 +32,61 @@ export default function EmployeeLogin() {
     }
 
     try {
-      const response = await loginEmployee({
+      const adminRes = await loginAdmin({
         username: formData.username,
         password: formData.password,
       });
-      const { token } = response.data;
-      login(token);
-      console.log(response.data);
-      navigate('/paymentPortal');
 
-      setFormData({
-        username: '',
-        password: '',
+      const { token, admin } = adminRes.data;
+      login(token);                       // store JWT
+      console.log('Admin login success:', admin);
+
+      navigate('/allEmployees');
+      setFormData({ username: '', password: '' });
+      return;
+    } catch (adminErr) {
+      // Only continue if the error is "Invalid credentials"
+      const msg = adminErr.response?.data?.message;
+      if (msg !== 'Invalid credentials') {
+        setError(msg || adminErr.message || 'Admin login failed');
+        return;
+      }
+    } 
+
+    try {
+      const empRes = await loginEmployee({
+        username: formData.username,
+        password: formData.password,
       });
-    } catch (err) {
-      console.error('Employee login error:', err);
+
+      const { token } = empRes.data;
+      login(token);
+      console.log('Employee login success');
+
+      navigate('/paymentPortal');
+      setFormData({ username: '', password: '' });
+      return;
+    } catch (empErr) {
       setError(
-        err.response?.data?.message ||
-        err.message ||
-        'An error occurred during login.'
+        empErr.response?.data?.message ||
+        empErr.message ||
+        'Invalid username or password.'
       );
     }
   };
 
   const handleReset = () => {
-    setFormData({
-      username: '',
-      password: '',
-    });
+    setFormData({ username: '', password: '' });
     setError('');
   };
 
   return (
     <div style={{ textAlign: 'center', marginTop: '20px' }}>
-      <h1>Employee Login</h1>
+      <h1>Login</h1>
       <div>
-        <h3>Please fill out details below</h3>
+        <h3>Please enter your credentials</h3>
         {error && <p className="error-message">{error}</p>}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username</label>
@@ -108,20 +122,10 @@ export default function EmployeeLogin() {
             </div>
           </div>
 
-          <button type="submit">Submit</button>
+          <button type="submit">Login</button>
           <button type="reset" onClick={handleReset}>Reset</button>
         </form>
       </div>
     </div>
   );
 }
-
-{/*(GeeksforGeeks, 2025) FOr the eye needed to see password or not
-  USed for the eye in the password to see it or not*/}
-
-/*
-REFERENCES
-===============
-GeeksforGeeks, 2025. How to Show and Hide Password in React Native ? [Online] Available at: https://www.geeksforgeeks.org/react-native/how-to-show-and-hide-password-in-react-native/ [Accessed 09 October 2025]
-W3Schools. 2025. RegExp Character Classes. [online]  available at: https://www.w3schools.com/js/js_regexp_characters.asp [Accessed 09 October 2025]
-*/

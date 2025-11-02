@@ -9,15 +9,15 @@ const corsOptions = {
     credentials: true
 }
 
-const csrfProtection = csurf({
-    cookie: {
-        key: 'csrfToken',
-        httpOnly: false,      
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 3 * 60 * 60   //same as JWT
-    }
-})
+// const csrfProtection = csurf({
+//     cookie: {
+//         key: 'csrfToken',
+//         httpOnly: false,      
+//         secure: process.env.NODE_ENV === 'production',
+//         sameSite: 'lax',
+//         maxAge: 3 * 60 * 60   //same as JWT
+//     }
+// })
 
 const securityMiddleware = (app) => {
 app.use(cookieParser()) //(Srivastava, 2024)
@@ -58,10 +58,10 @@ app.use(helmet({ //(NpmJs, 2025)
 
     app.use(cors(corsOptions))
 
-    app.use(csrfProtection)
+    // app.use(csrfProtection)
 }
 
-module.exports = {securityMiddleware, csrfProtection}
+module.exports = {securityMiddleware}
 
 /* REFERENCES:
     AppSecEngineer. 18 December 2024. NO MORE Stored XSS Flaws in Your NodeJS Apps. [online video]. Available at: <https://www.youtube.com/watch?v=N8uKFarFZAQ> [Accessed 8 October 2025]
