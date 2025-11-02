@@ -23,7 +23,11 @@ const securityMiddleware = (app) => {
 app.use(cookieParser()) //(Srivastava, 2024)
 
 app.use(helmet({ //(NpmJs, 2025)
-        contentSecurityPolicy: { //(AppSecEngineer, 2024)
+    //(Stack Overflow, 2019 )
+    hsts: {
+        maxAge: 31536000, //Max age is 1 year (Hodges, 2012; Mozilla, 2025)
+    },
+    contentSecurityPolicy: { //(AppSecEngineer, 2024)
             useDefaults: true,
             directives: {
                 'default-src': ["'self'"], //allows scripts from the website itself but nowhere else (AppSecEngineer, 2024)
@@ -69,10 +73,13 @@ module.exports = {securityMiddleware}
     Goode, T. 2025. cors. [Online]. Available at: <https://expressjs.com/en/resources/middleware/cors.html> [Accessed 8 October 2025]
     Kpziy, S. 2025. Clickjacking Attacks and Protecting Your Web Products. [Online]. Available at:  https://serhiikoziy.medium.com/understanding-clickjacking-attacks-and-protecting-your-react-application-c32c953d0812
     IIE Emeris School of Computer Science. 19 July 2024. APDS7311 - Setting up CircleCi and SonarQube. [online video]. Available at: <https://youtu.be/I4CyzX5rhLU?si=x5jZT_zkXDjKekRo> [Accessed 8 October 2025]
+    Mozilla, 2025. Strict-Transport-Security header. [Online]. Available at: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Strict-Transport-Security [Accessed 2 November 2025]
+    Hodges, 2012. HTTP Strict Transport Security (HSTS). [Online]. Available at: https://www.rfc-editor.org/rfc/rfc6797#section-6.1 [Accessed 2 November 2025]
     Next, 2025. How to set a Content Security Policy (CSP) for your Next.js application. [Online]. Available at: https://nextjs.org/docs/app/guides/content-security-policy [Accessed 9 October 2025]
     NpmJs. March 2025. Helmet. [Online]. Available at: <https://www.npmjs.com/package/helmet> [Accessed 8 October 2025]
     Patel, R. 2024. [Online]. Available at: https://dev.to/rigalpatel001/preventing-clickjacking-attacks-in-javascript-39pj [Accessed 8 October 2025]
     SquahLabs. 21 October 2023. How To Use A Regex To Only Accept Numbers 0-9. [Online]. Available at: <https://www.squash.io/how-to-use-a-regex-to-only-accept-numbers-0-9/> [Accessed 8 October 2025]
     StackHawk, 2025. React Content Security Policy Guide: What It Is and How to Enable It. [Online]. Available at: https://www.stackhawk.com/blog/react-content-security-policy-guide-what-it-is-and-how-to-enable-it/ [Accessed 9 October 2025]
+    Stack Overflow, 2012. how to set HSTS header in create-react-app. [Online]. Available at: https://stackoverflow.com/questions/53289989/how-to-set-hsts-header-in-create-react-app [Accessed 2 November 2025]
     Srivastava, P. 29 February 2024. Implementing Csurf Middleware in Node.js. [Online]. Available at: < https://www.geeksforgeeks.org/node-js/implementing-csurf-middleware-in-node-js/ > [Accessed 26 October 2025]
     */
