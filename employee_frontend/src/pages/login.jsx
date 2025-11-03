@@ -60,7 +60,7 @@ export default function EmployeeLogin() {
       });
 
       const { token } = empRes.data;
-      login(token, employee, false);
+      login(token, 'employee', false);
       console.log('Employee login success');
 
       navigate('/paymentPortal');
