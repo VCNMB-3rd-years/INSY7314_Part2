@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { registerEmployee } from '../services/apiService.js'
+import { getPendingPayments } from '../services/apiService.js'
 import { useNavigate } from 'react-router-dom';
 import '../App.css'
 import icon from '../../image/icon.png'
@@ -7,119 +8,114 @@ import icon from '../../image/icon.png'
 //ONLY SUPER ADMIN CAN REGISTER AN EMPLOYEE
 export default function RegisterEmployee() {
     const navigate = useNavigate(); // Initialize navigate hook
+    const [error, setError] = useState('');
     const [formData, setFormData] = useState({
-        fullName: '',
-        idNumber: '',
-        accNumber: '',
-        userPassword: ''
+        username: '',
+        password: ''
     })
 
+    useEffect(() => {
+        const verifyAccess = async () => {
+            try {
+                const res = await getPendingPayments(); //return payload and role
+                console.log("API response:", res);
+                const role = res.data?.payload?.role || res.payload?.role;
+                const privilege = res.data?.payload?.privilege || res.payload?.privilege;
+
+                if (role !== 'admin' || privilege !== true) {
+                    navigate('/permissionDenied');
+                }
+            } catch (error) {
+                console.error("Something went wrong verifying access:", error);
+
+                if (error.response?.status === 401 || error.response?.data?.message === "Only admin has access to this function") {
+                    navigate('/permissionDenied');
+                } else {
+                    navigate('/permissionDenied');
+                }
+            }
+        };
+
+        verifyAccess();
+    }, [navigate]);
+
     const handleInputChange = (e) => {
+        setError('');
         setFormData({ ...formData, [e.target.name]: e.target.value }) //updates variable data as user types
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setError('');
         try {
             await registerEmployee(formData)
-            alert('Customer added')
+            alert('Employee registered successfully.')
             setFormData({
-                fullName: '',
-                idNumber: '',
-                accNumber: '',
-                userPassword: ''
+                username: '',
+                password: ''
             })
-            navigate('/login');
+            navigate('/allEmployees');
         } catch (error) {
-            console.error('Registration failed:', error);
+            setError(
+                error.response?.data?.message ||
+                error.message ||
+                'Sorry, we could not register your account'
+            )
             alert('Registration failed. Please try again.');
         }
     }
 
     const handleReset = () => {
         setFormData({
-            fullName: '',
-            idNumber: '',
-            accNumber: '',
-            userPassword: ''
+            username: '',
+            password: ''
         })
+        setError('');
     }
 
     const namePattern = "^[a-zA-Z0-9]{1,30}$" // w3schools
-    const idPattern = "^(?!.*[A-Za-z])\\d{13}$" // w3schools
-    const accNrPattern = "^acc\\d{9}$"; // w3schools
     const passwordPattern = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])[^\\s]{8,16}$"; // qho, 2023
 
     return (
-        
-            <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <img 
-            src={icon} 
-            alt="Company Logo" 
-            style={{ width: '200px', height: 'auto', marginBottom: '1px' }} 
-        />
-            
-            
-            <h1>Customer Registration</h1>
+
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <img
+                src={icon}
+                alt="Company Logo"
+                style={{ width: '200px', height: 'auto', marginBottom: '1px' }}
+            />
+
+
+            <h1>Employee Registration</h1>
             <div>
                 <h3>Please fill out details below</h3>
+                {error && <p>{error}</p>}
                 <form onSubmit={handleSubmit}>
                     {/*(Ui prep, 2025) Used it to figire out how to chnage the input fields*/}
-                    <div className="form-group"> 
-                        <label htmlFor="fullName">Full Name</label>
+                    <div className="form-group">
+                        <label htmlFor="username">Full Name</label>
                         <input
                             type="text"
-                            id="fullName"
-                            name="fullName"
-                            placeholder="Full Name"
-                            value={formData.fullName}
+                            id="username"
+                            name="username"
+                            placeholder="Username"
+                            value={formData.username}
                             onChange={handleInputChange}
                             required
                             pattern={namePattern}
                             title="Ensure that the name enters has no special characters in it, and between 1 and 30 characters"
                         />
                     </div>
-                        {/*(Ui prep, 2025) */}
-                    <div className="form-group">
-                        <label htmlFor="idNumber">ID Number</label>
-                        <input
-                            type="text"
-                            id="idNumber"
-                            name="idNumber"
-                            placeholder="ID Number"
-                            value={formData.idNumber}
-                            onChange={handleInputChange}
-                            required
-                            pattern={idPattern}
-                            title="ensure that the id is a lenght of 13 letters and no alphabetical characters"
-                        />
-                    </div>
 
                     {/*(Ui prep, 2025) */}
                     <div className="form-group">
-                        <label htmlFor="accNumber">Account Number</label>
-                        <input
-                            type="text"
-                            id="accNumber"
-                            name="accNumber"
-                            placeholder="e.g. acc123456789"
-                            value={formData.accNumber.toLowerCase()}
-                            onChange={handleInputChange}
-                            pattern={accNrPattern}
-                            title="Account number must start with 'acc' followed by 9 digits"
-                            required
-                        />
-                    </div>
-
-                    {/*(Ui prep, 2025) */}
-                    <div className="form-group">
-                        <label htmlFor="userPassword">Password</label>
+                        <label htmlFor="password">Password</label>
                         <input
                             type="password"
-                            id="userPassword"
-                            name="userPassword"
-                            placeholder="password"
-                            value={formData.userPassword}
+                            id="password"
+                            name="password"
+                            placeholder="Password"
+                            value={formData.password}
                             onChange={handleInputChange}
                             pattern={passwordPattern}
                             title='Password must contain at least one number, one uppercase letter, one lowercase letter, and one special character.'

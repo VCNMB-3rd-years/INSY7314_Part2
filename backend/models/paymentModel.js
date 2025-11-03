@@ -8,7 +8,7 @@ const paymentSchema = new mongoose.Schema({ //define layout of a paymentt object
     currency: {type: String, required: true},
     provider: {type: String, required: true},
     swiftCode: {type: String, required: true},
-    verified: {type: Boolean, required: true}
+    verified: {type: String, required: true}
 })
 
 const Payment = mongoose.model('Payment', paymentSchema) //link payment layout ot db

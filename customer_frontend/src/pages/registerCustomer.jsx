@@ -6,6 +6,7 @@ import icon from '../../image/icon.png'
 
 export default function RegisterCustomer() {
     const navigate = useNavigate(); // Initialize navigate hook
+    const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         fullName: '',
         idNumber: '',
@@ -14,14 +15,16 @@ export default function RegisterCustomer() {
     })
 
     const handleInputChange = (e) => {
+        setError('');
         setFormData({ ...formData, [e.target.name]: e.target.value }) //updates variable data as user types
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setError('');
         try {
             await registerCustomer(formData)
-            alert('Customer added')
+            alert('Customer registered successfully.')
             setFormData({
                 fullName: '',
                 idNumber: '',
@@ -31,11 +34,17 @@ export default function RegisterCustomer() {
             navigate('/login');
         } catch (error) {
             console.error('Registration failed:', error);
+            setError(
+                error.response?.data?.message ||
+                error.message ||
+                'Sorry, we could not register your account'
+            )
             alert('Registration failed. Please try again.');
         }
     }
 
     const handleReset = () => {
+        setError('');
         setFormData({
             fullName: '',
             idNumber: '',
@@ -62,6 +71,7 @@ export default function RegisterCustomer() {
             <h1>Customer Registration</h1>
             <div>
                 <h3>Please fill out details below</h3>
+                {error && <p>{error}</p>}
                 <form onSubmit={handleSubmit}>
                     {/*(Ui prep, 2025) Used it to figire out how to chnage the input fields*/}
                     <div className="form-group"> 

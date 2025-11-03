@@ -1,11 +1,26 @@
 # PayNow — Project Overview
-Welcome to payNow, a Payment Portal that enables a smooth, secure handoff of payments to SWIFT (our South African provider). 
+Welcome to payNow, Payment Portals that enable a smooth, secure handoff of payments to SWIFT (our South African provider). 
+
+## Updates to PayNow
+- New Frontend
+  - Employees and Customers are separated into 2 separate frontends still communicating with the same backend.
+  - Admins are a newly introduced user role.
 
 ## Quick map
-- Frontend: [frontend/src](frontend/src) — UI and API client  
-  - Pages: [registerCustomer.jsx](frontend/src/pages/registerCustomer.jsx), [login.jsx](frontend/src/pages/login.jsx), [makePayment.jsx](frontend/src/pages/makePayment.jsx), [viewPayments.jsx](frontend/src/pages/viewPayments.jsx), [paymentPortal.jsx](frontend/src/pages/paymentPortal.jsx)  
-  - API client: [`api` / `setAuthToken`](frontend/src/interfaces/axiosInstance.js)  
-  - Vite + CSP + HTTPS dev server: [vite.config.js](frontend/vite.config.js)
+
+- Customer frontend: [customer_frontend/src](customer_frontend/src) — UI for customers and the customer-facing SPA
+  - Pages: [registerCustomer.jsx](customer_frontend/src/pages/registerCustomer.jsx), [login.jsx](customer_frontend/src/pages/login.jsx), [makePayment.jsx](customer_frontend/src/pages/makePayment.jsx), [viewPayments.jsx](customer_frontend/src/pages/viewPayments.jsx), [welcomePage.jsx](customer_frontend/src/pages/welcomePage.jsx)
+  - API client: [`api` / `setAuthToken`](customer_frontend/src/interfaces/axiosInstance.js)
+  - Vite + CSP + HTTPS dev server: [customer_frontend/vite.config.js](customer_frontend/vite.config.js)
+
+- Employee frontend: [employee_frontend/src](employee_frontend/src) — UI for employees and admins
+  - Pages: [login.jsx](employee_frontend/src/pages/login.jsx), [paymentPortal.jsx](employee_frontend/src/pages/paymentPortal.jsx), [paymentHistory.jsx](employee_frontend/src/pages/paymentHistory.jsx), [allEmployees.jsx](employee_frontend/src/pages/allEmployees.jsx), [welcomePage.jsx](employee_frontend/src/pages/welcomePage.jsx)
+  - API client: [`api` / `setAuthToken`](employee_frontend/src/interfaces/axiosInstance.js)
+  - Vite + CSP + HTTPS dev server: [employee_frontend/vite.config.js](employee_frontend/vite.config.js)
+  - Roles & capabilities:
+    - Employee: view pending payments, verify or reject payments via the Payment Portal, and view payment history.
+    - Admin: same capabilities as an employee, plus ability to delete employee accounts.
+    - Super Admin (single account): full admin privileges and the ability to register new employee accounts.
 
 - Backend: [backend](backend) — API and DB  
   - Controllers: [`register`, `login`, `logout`](backend/controllers/customerController.js); [`registerEmployee`, `loginEmployee`](backend/controllers/employeeController.js); [`createPayment`, `getCustomerPayments`, `getPendingPayments`, `verifyPayment`](backend/controllers/paymentController.js)  
@@ -18,46 +33,49 @@ Welcome to payNow, a Payment Portal that enables a smooth, secure handoff of pay
 
 ## Main functionality
 
-- Register customers
-  - Frontend form: [registerCustomer.jsx](frontend/src/pages/registerCustomer.jsx)  
+-- Register customers
+  - Frontend form: [registerCustomer.jsx](customer_frontend/src/pages/registerCustomer.jsx)  
   - Backend registration logic: [`register`](backend/controllers/customerController.js) — input validation, sanitization, password hashing via Mongoose pre‑save hook in [customerModel.js](backend/models/customerModel.js).
 
 - Login (customers & employees)
-  - Shared frontend login form: [login.jsx](frontend/src/pages/login.jsx) — chooses customer vs employee based on account number field and calls API via [apiService.js](frontend/src/services/apiService.js).  
-  - Customer login: [`login`](backend/controllers/customerController.js) — validates, matches hashed password, then issues JWT and sets an HTTP‑only cookie.  
-  - Employee login: [`loginEmployee`](backend/controllers/employeeController.js) — validates and returns JWT in response.
+  - Customer login form: [login.jsx](customer_frontend/src/pages/login.jsx) — customer accounts authenticate via the customer frontend and receive JWT in an HTTP‑only cookie.
+  - Employee/Admin login form: [login.jsx](employee_frontend/src/pages/login.jsx) — employees and admins authenticate via the employee frontend and receive JWTs as appropriate.
+  - Customer login logic: [`login`](backend/controllers/customerController.js) — validates, matches hashed password, then issues JWT and sets an HTTP‑only cookie.
+  - Employee login logic: [`loginEmployee`](backend/controllers/employeeController.js) — validates and returns JWT in response for employee flows.
+  - Admin login logic: [`loginEmployee`](backend/controllers/adminController.js) — validates and returns JWT in response for admin flows.
 
-- Create payment (customers)
-  - Frontend create payment page: [makePayment.jsx](frontend/src/pages/makePayment.jsx)  
-  - Backend: [`createPayment`](backend/controllers/paymentController.js) — requires authenticated user (`verifyToken`), validates/sanitizes inputs, stores payment document in MongoDB ([paymentModel.js](backend/models/paymentModel.js)) with `verified: false`.
+-- Create payment (customers)
+  - Frontend create payment page: [makePayment.jsx](customer_frontend/src/pages/makePayment.jsx)  
+  - Backend: [`createPayment`](backend/controllers/paymentController.js) — requires authenticated user (`verifyToken`), validates/sanitizes inputs, stores payment document in MongoDB ([paymentModel.js](backend/models/paymentModel.js)) with `verified: PENDING`.
 
 - View payments
-  - Customer view their payments: frontend [viewPayments.jsx](frontend/src/pages/viewPayments.jsx) calling [apiService.getCustomerPayments](frontend/src/services/apiService.js) -> backend [`getCustomerPayments`](backend/controllers/paymentController.js) (requires `verifyToken`).  
-  - Employee view pending payments: frontend [paymentPortal.jsx](frontend/src/pages/paymentPortal.jsx) calling [apiService.getPendingPayments](frontend/src/services/apiService.js) -> backend [`getPendingPayments`](backend/controllers/paymentController.js). Employees can verify payments via [`verifyPayment`](backend/controllers/paymentController.js) (route wired in [paymentRoutes.js](backend/routes/paymentRoutes.js)).
+  - Customer view their payments: customer frontend [viewPayments.jsx](customer_frontend/src/pages/viewPayments.jsx) calling [apiService.getCustomerPayments](customer_frontend/src/services/apiService.js) -> backend [`getCustomerPayments`](backend/controllers/paymentController.js) (requires `verifyToken`).
+  - Employees and Admins view all pending payments: employee frontend [paymentPortal.jsx](employee_frontend/src/pages/paymentPortal.jsx) calling [apiService.getPendingPayments](employee_frontend/src/services/apiService.js) -> backend [`getPendingPayments`](backend/controllers/paymentController.js). Employees can verify or reject payments via [`verifyPayment`](backend/controllers/paymentController.js) (route wired in [paymentRoutes.js](backend/routes/paymentRoutes.js)). 
+  - Employees and Admins view all past processed payments: employee frontend [paymentHistory.jsx](employee_frontend/src/pages/paymentHistory.jsx) calling [apiService.getProcessedPayments](employee_frontend/src/services/apiService.js) -> backend [`getProcessedPayments`](backend/controllers/paymentController.js). Admins can also manage employee accounts by deleting the accounts.
 
 ## Security features implemented (what and where)
 
 - SSL / HTTPS (local dev)
   - Backend serves HTTPS using certs: [backend/app.js](backend/app.js) reads `./certs/localhost+1-key.pem` and `./certs/localhost+1.pem` and runs an HTTPS server. Cert files: [backend/certs/localhost+1.pem](backend/certs/localhost+1.pem), [backend/certs/localhost+1-key.pem](backend/certs/localhost+1-key.pem).
-  - Frontend dev server also configured for HTTPS using same certs: [frontend/vite.config.js](frontend/vite.config.js).
+  - Frontend dev servers also configured for HTTPS using the same certs: [customer_frontend/vite.config.js](customer_frontend/vite.config.js) and [employee_frontend/vite.config.js](employee_frontend/vite.config.js).
 
 - Helmet and Content Security Policy (CSP)
   - Backend CSP & other headers via [`securityMiddleware`](backend/middleware/securityMiddleware.js). Helmet is configured with CSP directives (default-src, script-src, style-src, img-src, object-src, frame-ancestors, upgrade-insecure-requests), frameguard, crossOriginOpenerPolicy and crossOriginResourcePolicy, permissionsPolicy, noSniff, xssFilter, and hidePoweredBy. See [`securityMiddleware`](backend/middleware/securityMiddleware.js).
-  - Frontend build uses `vite-plugin-csp` to enforce CSP in dev/build: [frontend/vite.config.js](frontend/vite.config.js).
+  - Frontend build uses `vite-plugin-csp` to enforce CSP in dev/build: see [customer_frontend/vite.config.js](customer_frontend/vite.config.js) and [employee_frontend/vite.config.js](employee_frontend/vite.config.js).
 
 - CORS
-  - Backend CORS policy in [`securityMiddleware`](backend/middleware/securityMiddleware.js) restricts origin to `https://localhost:5173` and enables credentials (cookies). See `corsOptions` in [securityMiddleware.js](backend/middleware/securityMiddleware.js).
+  - Backend CORS policy in [`securityMiddleware`](backend/middleware/securityMiddleware.js) restricts origin to `https://localhost:5173` (updateable via env) and enables credentials (cookies). See `corsOptions` in [securityMiddleware.js](backend/middleware/securityMiddleware.js).
 
 - XSS protection & input sanitization
   - Backend uses `xss` to sanitize critical fields in [`createPayment`](backend/controllers/paymentController.js). See usage in [paymentController.js](backend/controllers/paymentController.js).
   - Input escaping & validation using `validator` across controllers: [`customerController.js`](backend/controllers/customerController.js) and [`paymentController.js`](backend/controllers/paymentController.js).
 
 - Mongo / server-side sanitisation & safe responses
-  - Models hash passwords and hide password fields: [customerModel.js](backend/models/customerModel.js) and [employeeModel.js](backend/models/employeeModel.js) (pre-save hooks and `.select` usage). See the `.pre('save')` hooks and `select: false`.
+  - Models hash passwords and hide password fields: [customerModel.js](backend/models/customerModel.js), [employeeModel.js](backend/models/employeeModel.js) and [adminModel.js](backend/models/adminModel.js) (pre-save hooks and `.select` usage). See the `.pre('save')` hooks and `select: false`.
   - Controllers remove password fields before returning created/queried documents (e.g., `delete safe.userPassword` / `delete safe.password`).
 
 - Regex patterns & client + server validation
-  - Client-side patterns (HTML input `pattern`) in [registerCustomer.jsx](frontend/src/pages/registerCustomer.jsx), [login.jsx](frontend/src/pages/login.jsx), [makePayment.jsx](frontend/src/pages/makePayment.jsx).  
+  - Client-side patterns (HTML input `pattern`) in [registerCustomer.jsx](customer_frontend/src/pages/registerCustomer.jsx), [login.jsx](customer_frontend/src/pages/login.jsx), [makePayment.jsx](customer_frontend/src/pages/makePayment.jsx).  
   - Server-side regex checks mirror client rules using `validator.matches` in controllers: [`customerController.js`](backend/controllers/customerController.js) and [`paymentController.js`](backend/controllers/paymentController.js). Examples include account format `^acc\d{9}$`, currency `^[A-Z]{3}$`, SWIFT pattern, and password complexity.
 
 - Frame busting / clickjacking protection
@@ -69,8 +87,9 @@ Welcome to payNow, a Payment Portal that enables a smooth, secure handoff of pay
   - Server verifies cookie token via [`verifyToken`](backend/middleware/authMiddleware.js) (reads `req.cookies.token`). See [authMiddleware.js](backend/middleware/authMiddleware.js).
   - Logout invalidates token using an in‑memory blacklist (`invalidateToken`) and clears cookie in [`logout`](backend/controllers/customerController.js). See [`invalidateToken`](backend/middleware/authMiddleware.js) and logout flow in [customerController.js](backend/controllers/customerController.js).
 
-- CSRF mitigation
-  - Using `SameSite: 'Strict'` on auth cookie and requiring `withCredentials: true` in the frontend axios instance reduces cross‑site cookie sending. Axios config: [frontend/src/interfaces/axiosInstance.js](frontend/src/interfaces/axiosInstance.js) (`withCredentials: true`).
+ - HSTS (HTTP Strict Transport Security)
+  - The backend sends HSTS headers via Helmet (configured in [`securityMiddleware`](backend/middleware/securityMiddleware.js)) in production so browsers remember to only use HTTPS for the site.
+  - Auth cookies and sensitive endpoints should then be served only over HTTPS; ensure NODE_ENV=production and secure cookie flags are set in production.
 
 - Rate limiting & brute-force protection
   - Route-level rate limiting using `express-rate-limit` in [paymentRoutes.js](backend/routes/paymentRoutes.js), [employeeRoutes.js](backend/routes/employeeRoutes.js), [customerRoutes.js](backend/routes/customerRoutes.js).
@@ -81,14 +100,18 @@ Welcome to payNow, a Payment Portal that enables a smooth, secure handoff of pay
   - `helmet` options like `noSniff` and `hidePoweredBy` are enabled in [`securityMiddleware`](backend/middleware/securityMiddleware.js).
 
 ## Key files & symbols (quick links)
-- Controllers: [`register`, `login`, `logout`](backend/controllers/customerController.js) — [backend/controllers/customerController.js](backend/controllers/customerController.js)  
-- Employee controller: [`registerEmployee`, `loginEmployee`](backend/controllers/employeeController.js) — [backend/controllers/employeeController.js](backend/controllers/employeeController.js)  
-- Payments: [`createPayment`, `getCustomerPayments`, `getPendingPayments`, `verifyPayment`](backend/controllers/paymentController.js) — [backend/controllers/paymentController.js](backend/controllers/paymentController.js)  
-- Auth: [`generateJwt`](backend/controllers/authController.js) — [backend/controllers/authController.js](backend/controllers/authController.js)  
-- Middleware: [`verifyToken`, `invalidateToken`](backend/middleware/authMiddleware.js) — [backend/middleware/authMiddleware.js](backend/middleware/authMiddleware.js)  
-- Security middleware: [`securityMiddleware`](backend/middleware/securityMiddleware.js) — [backend/middleware/securityMiddleware.js](backend/middleware/securityMiddleware.js)  
-- Frontend API client: [`api`, `setAuthToken`](frontend/src/interfaces/axiosInstance.js) — [frontend/src/interfaces/axiosInstance.js](frontend/src/interfaces/axiosInstance.js)  
-- Frontend pages: [registerCustomer.jsx](frontend/src/pages/registerCustomer.jsx), [login.jsx](frontend/src/pages/login.jsx), [makePayment.jsx](frontend/src/pages/makePayment.jsx), [viewPayments.jsx](frontend/src/pages/viewPayments.jsx), [paymentPortal.jsx](frontend/src/pages/paymentPortal.jsx)
+- Controllers: [`register`, `login`, `logout`](backend/controllers/customerController.js) — [backend/controllers/customerController.js](backend/controllers/customerController.js)
+- Employee controller: [`registerEmployee`, `loginEmployee`](backend/controllers/employeeController.js) — [backend/controllers/employeeController.js](backend/controllers/employeeController.js)
+- Payments: [`createPayment`, `getCustomerPayments`, `getPendingPayments`, `verifyPayment`](backend/controllers/paymentController.js) — [backend/controllers/paymentController.js](backend/controllers/paymentController.js)
+- Auth: [`generateJwt`](backend/controllers/authController.js) — [backend/controllers/authController.js](backend/controllers/authController.js)
+- Middleware: [`verifyToken`, `invalidateToken`](backend/middleware/authMiddleware.js) — [backend/middleware/authMiddleware.js](backend/middleware/authMiddleware.js)
+- Security middleware: [`securityMiddleware`](backend/middleware/securityMiddleware.js) — [backend/middleware/securityMiddleware.js](backend/middleware/securityMiddleware.js)
+- Frontend API clients:
+  - Customer: [`api`, `setAuthToken`](customer_frontend/src/interfaces/axiosInstance.js) — [customer_frontend/src/interfaces/axiosInstance.js](customer_frontend/src/interfaces/axiosInstance.js)
+  - Employee and Admin: [`api`, `setAuthToken`](employee_frontend/src/interfaces/axiosInstance.js) — [employee_frontend/src/interfaces/axiosInstance.js](employee_frontend/src/interfaces/axiosInstance.js)
+- Frontend pages:
+  - Customer frontend: [registerCustomer.jsx](customer_frontend/src/pages/registerCustomer.jsx), [login.jsx](customer_frontend/src/pages/login.jsx), [makePayment.jsx](customer_frontend/src/pages/makePayment.jsx), [viewPayments.jsx](customer_frontend/src/pages/viewPayments.jsx)
+  - Employee frontend: [login.jsx](employee_frontend/src/pages/login.jsx), [paymentPortal.jsx](employee_frontend/src/pages/paymentPortal.jsx), [paymentHistory.jsx](employee_frontend/src/pages/paymentHistory.jsx), [allEmployees.jsx](employee_frontend/src/pages/allEmployees.jsx), [registerEmployee.jsx](employee_frontend/src/pages/registerEmployee.jsx) 
 
 ---
 

@@ -44,4 +44,26 @@ const invalidateToken = (token) => {
     tokenBlacklist.add(token)
 }
 
-module.exports = {verifyToken, invalidateToken}
+
+
+//Middleware for the admins
+const isAdmin = (req, res, next) => {
+    if (req.user && req.user.role == 'admin') {
+        next();
+    } else {
+        res.status(403).json({ message: "Forbidden: Admin access required." });
+    }
+}
+
+
+const isSuperAdmin = (req, res, next) => {
+    if (req.user && req.user.role == 'admin' && req.user.payload.privilege == true) {
+        next();
+    } else {
+        res.status(403).json({ message: "Forbidden: Super Admin access required." });
+    }
+}
+
+
+
+module.exports = {verifyToken, invalidateToken, isAdmin, isSuperAdmin}
