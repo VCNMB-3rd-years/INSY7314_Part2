@@ -138,6 +138,10 @@ const logout = async(req, res) => {
 // delete a employee (Username)
 const deleteEmployee = async (req, res) => {
     try {
+        if (req.user.role !== 'admin') {
+            return res.status(401).json({message: "Only admin has access to this function"})
+        }
+        
         const { username } = req.body;
 
         // Validate input

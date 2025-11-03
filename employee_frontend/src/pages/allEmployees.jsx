@@ -14,7 +14,7 @@ export default function AllEmployees() {
             setEmployees(res.data || []) // Fallback to empty array if no data
         } catch (error) {
             console.error("Error fetching employees", error)
-            if (error.response && error.response.status === 401) {
+            if (error.response || error.response.status === 401 || error.response.message === "Only admin has access to this function") {
                 navigate('/permissionDenied')
             }
             setEmployees([])

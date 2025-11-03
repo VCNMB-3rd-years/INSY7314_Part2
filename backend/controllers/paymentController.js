@@ -15,6 +15,10 @@ const createPayment = async(req, res) => {
         return res.status(400).json({message: "Please ensure all required fields are filled out"})
     }
 
+    if (req.user.role !== 'customer') {
+        return res.status(401).json({message: "Only customers should be on this page"})
+    }
+
     const sanitizedName = xss(validator.escape(customerName?.toString() || ''))
     const sanitizedAmount = parseFloat(amount)
     const sanitizedProvider = xss(validator.escape(provider?.toString() || ''))
@@ -47,7 +51,7 @@ const createPayment = async(req, res) => {
     }
 
     if (!validator.matches(sanitizedSwiftCode, /^([a-zA-Z]{4})[-\s]?([a-zA-Z]{2})[-\s]?([0-9a-zA-Z]{2})([-\s]?[0-9a-zA-Z]{3})?$/)) { //(Klesun, 2024)
-        return res.status(400).json({ message: "Swift Code format must follow: AAAA-BB-CC-123)." });
+        return res.status(400).json({ message: "Swift Code format must follow: AAAA-BB-CC-123." });
     }
 
     if (req.user.payload.fullName !== sanitizedName || req.user.payload.accNumber !== sanitizedAccNumber) {
@@ -77,7 +81,7 @@ const verifyPayment = async(req, res) => {
     const id = req.params.id
     let {customerName, amount, currency, provider, verified} = req.body //pull payment object from frontend
 
-if (req.user.role !== 'employee' && req.user.role !== 'admin') {
+    if (req.user.role !== 'employee' && req.user.role !== 'admin') {
         return res.status(401).json({message: "Only employees have access to this page"})
     }
 
@@ -133,6 +137,10 @@ const rejectPayment = async(req, res) => {
 //VIEW ALL CURRENT CUSTOMER PAYMENTS (get)
 const getCustomerPayments = async(req, res) => {
     try {
+        if (req.user.role !== 'customer') {
+            return res.status(401).json({message: "Only customers should be on this page"})
+        }
+
         //ensure someone is logged in when they naviagte to the payment page
         if (!req.user || !req.user.payload.fullName || !req.user.payload.accNumber) {
             return res.status(401).json({message: "You muts be logged in to make a payment"}) //401 forbidden if not logged in
@@ -174,14 +182,14 @@ const getProcessedPayments = async(req, res) => {
 }
 
 //TESTING PURPOSES
-const deleteAllPayments = async (req, res) => {
-    try {
-        await Payment.deleteMany({});
-        return res.status(200).json({ message: 'All payments have been deleted successfully.' });
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
-};
+// const deleteAllPayments = async (req, res) => {
+//     try {
+//         await Payment.deleteMany({});
+//         return res.status(200).json({ message: 'All payments have been deleted successfully.' });
+//     } catch (error) {
+//         return res.status(500).json({ error: error.message });
+//     }
+// };
 
 module.exports = {
     createPayment, 
@@ -189,8 +197,8 @@ module.exports = {
     rejectPayment,
     getPendingPayments,
     getProcessedPayments,
-    getCustomerPayments,
-    deleteAllPayments
+    getCustomerPayments
+    // deleteAllPayments
 }
 
 /*

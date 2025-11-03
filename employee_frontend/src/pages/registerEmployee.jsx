@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { registerEmployee } from '../services/apiService.js'
+import { getPendingPayments } from '../services/apiService.js'
 import { useNavigate } from 'react-router-dom';
 import '../App.css'
 import icon from '../../image/icon.png'
@@ -7,27 +8,59 @@ import icon from '../../image/icon.png'
 //ONLY SUPER ADMIN CAN REGISTER AN EMPLOYEE
 export default function RegisterEmployee() {
     const navigate = useNavigate(); // Initialize navigate hook
+    const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         username: '',
         password: ''
     })
 
+    useEffect(() => {
+        const verifyAccess = async () => {
+            try {
+                const res = await getPendingPayments(); //return payload and role
+                console.log("API response:", res);
+                const role = res.data?.payload?.role || res.payload?.role;
+                const privilege = res.data?.payload?.privilege || res.payload?.privilege;
+
+                if (role !== 'admin' || privilege !== true) {
+                    navigate('/permissionDenied');
+                }
+            } catch (error) {
+                console.error("Something went wrong verifying access:", error);
+
+                if (error.response?.status === 401 || error.response?.data?.message === "Only admin has access to this function") {
+                    navigate('/permissionDenied');
+                } else {
+                    navigate('/permissionDenied');
+                }
+            }
+        };
+
+        verifyAccess();
+    }, [navigate]);
+
     const handleInputChange = (e) => {
+        setError('');
         setFormData({ ...formData, [e.target.name]: e.target.value }) //updates variable data as user types
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setError('');
         try {
             await registerEmployee(formData)
-            alert('Employee added')
+            alert('Employee registered successfully.')
             setFormData({
                 username: '',
                 password: ''
             })
             navigate('/allEmployees');
         } catch (error) {
-            console.error('Registration failed:', error);
+            setError(
+                error.response?.data?.message ||
+                error.message ||
+                'Sorry, we could not register your account'
+            )
             alert('Registration failed. Please try again.');
         }
     }
@@ -37,27 +70,29 @@ export default function RegisterEmployee() {
             username: '',
             password: ''
         })
+        setError('');
     }
 
     const namePattern = "^[a-zA-Z0-9]{1,30}$" // w3schools
     const passwordPattern = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])[^\\s]{8,16}$"; // qho, 2023
 
     return (
-        
-            <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <img 
-            src={icon} 
-            alt="Company Logo" 
-            style={{ width: '200px', height: 'auto', marginBottom: '1px' }} 
-        />
-            
-            
+
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+            <img
+                src={icon}
+                alt="Company Logo"
+                style={{ width: '200px', height: 'auto', marginBottom: '1px' }}
+            />
+
+
             <h1>Employee Registration</h1>
             <div>
                 <h3>Please fill out details below</h3>
+                {error && <p>{error}</p>}
                 <form onSubmit={handleSubmit}>
                     {/*(Ui prep, 2025) Used it to figire out how to chnage the input fields*/}
-                    <div className="form-group"> 
+                    <div className="form-group">
                         <label htmlFor="username">Full Name</label>
                         <input
                             type="text"
@@ -71,7 +106,7 @@ export default function RegisterEmployee() {
                             title="Ensure that the name enters has no special characters in it, and between 1 and 30 characters"
                         />
                     </div>
-                        
+
                     {/*(Ui prep, 2025) */}
                     <div className="form-group">
                         <label htmlFor="password">Password</label>

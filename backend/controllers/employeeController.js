@@ -8,6 +8,10 @@ const { invalidateToken } = require('../middleware/authMiddleware.js')
 const registerEmployee = async (req, res) => {
     //Information needed for registration
     try {
+        if (req.user.role !== 'admin' && req.user.privilege !== true) { //only main admin has access to this
+            return res.status(401).json({message: "Only one admin has access to this function"})
+        }
+
         const {
             username,
             password
@@ -24,8 +28,6 @@ const registerEmployee = async (req, res) => {
             return res.status(400).json({ message: "Employee already exists." });
         }
 
-
-
         //Create a new Customer
         const createdEmployee = await Employee.create(
             {
@@ -36,8 +38,6 @@ const registerEmployee = async (req, res) => {
         const safe = createdEmployee.toObject ? createdEmployee.toObject() : createdEmployee;
         delete safe.password;
         return res.status(201).json({ message: "Employee registered", employee: safe });
-
-
     }
     catch (error) {
         return res.status(500).json({ error: "Server error during registration." })
@@ -104,6 +104,10 @@ const loginEmployee = async (req, res) => {
 //This can be done by all admins 
 const viewAllEmployees = async (req, res) => {
 try {
+    if (req.user.role !== 'admin') { //only main admin has access to this
+            return res.status(401).json({message: "Only admin has access to this function"})
+        }
+
     //GeeksForGeeks, 2025
         const employees = await Employee.find().select('-password');
         return res.status(200).json(employees);

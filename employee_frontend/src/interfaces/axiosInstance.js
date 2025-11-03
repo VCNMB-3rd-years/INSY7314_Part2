@@ -2,7 +2,7 @@ import axios from 'axios' //imports axios to connect to api
 
 //rudderz243, 2025
 export const api = axios.create({
-    baseURL: 'https://localhost:3003/v1',
+    baseURL: 'https://localhost:3002/v1',
     headers: {
         'Content-Type': 'application/json'
     },
