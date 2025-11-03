@@ -11,6 +11,10 @@ COPY package*.json ./
 # Install those packages, so that our API will work in the container
 RUN npm i
 
+# needed for https on docker
+COPY ./certs/localhost+1.pem ./
+COPY ./certs/localhost+1-key.pem ./
+
 # Once all the packages are installed, we then copy across the actual code for our API
 COPY . .
 

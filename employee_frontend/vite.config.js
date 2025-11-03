@@ -20,6 +20,9 @@ export default defineConfig({
     })
   ],
   server: {
+    //for external access ie docker
+    host: '0.0.0.0', 
+    port: 5174,
     https: {
       key: fs.readFileSync('./certs/localhost+1-key.pem'),
       cert: fs.readFileSync('./certs/localhost+1.pem')
