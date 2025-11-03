@@ -25,7 +25,7 @@ export default function RegisterEmployee() {
                 username: '',
                 password: ''
             })
-            navigate('/login');
+            navigate('/allEmployees');
         } catch (error) {
             console.error('Registration failed:', error);
             alert('Registration failed. Please try again.');
