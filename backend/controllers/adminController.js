@@ -21,8 +21,9 @@ const registerAdmin = async (req, res) => {
         }
 
         //Checks if MAIN admin exists
-       const isSuperAdmin = (privilege === true || privilege === 'true');
-        if (isSuperAdmin) {
+       
+        if (privilege === true) {
+            //GeeksForGeeks, 2025. 
             const superAdminExists = await Admin.findOne({ privilege: true });
             if (superAdminExists) {
                 return res.status(400).json({ message: "A Super Admin already exists. Cannot create another." });
@@ -30,8 +31,8 @@ const registerAdmin = async (req, res) => {
         }
 
         //This is just the regular admin
-        const adminExists = await Admin.findOne({ username });
-        if (adminExists) {
+        //GeeksForGeeks, 2025
+        if (await Admin.findOne({ username })) {
             return res.status(400).json({ message: "Admin username already exists." });
         }
 
@@ -90,7 +91,6 @@ const loginAdmin = async (req, res) => {
         // (Gyawali, 2024)
         const safeAdmin = adminData.toObject ? adminData.toObject() : adminData;
         delete safeAdmin.password;
-        //delete safeAdmin.privilege;
 
         const token = generateJwt({
             id: adminData._id,
@@ -169,3 +169,12 @@ module.exports = {
     logout,
     deleteEmployee
 }
+
+
+/*
+REFERENCES
+====================
+GeeksForGeeks, 2025. MongoDB - FindOne() Method. [Online]. Available at: https://www.geeksforgeeks.org/mongodb/mongodb-findone-method/
+
+
+*/

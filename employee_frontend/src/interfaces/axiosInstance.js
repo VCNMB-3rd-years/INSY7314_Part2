@@ -1,5 +1,6 @@
 import axios from 'axios' //imports axios to connect to api
 
+//rudderz243, 2025
 export const api = axios.create({
     baseURL: 'https://localhost:3003/v1',
     headers: {
@@ -22,3 +23,9 @@ export const logoutCustomer = async () => {
 };
 
 export default api
+
+
+/*References
+===============
+rudderz243, 2025. library_api. [Online]. Available at: https://github.com/rudderz243/library_api/blob/main/frontend/src/App.jsx 
+*/
