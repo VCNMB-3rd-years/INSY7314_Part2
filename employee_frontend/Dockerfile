@@ -11,8 +11,8 @@ COPY package*.json ./
 RUN npm i
 
 # needed for https on docker
-COPY ./certs/localhost+1.pem ./
-COPY ./certs/localhost+1-key.pem ./
+COPY ./certs/localhost+1.pem ./certs/
+COPY ./certs/localhost+1-key.pem ./certs/
 
 # copy ander goed
 COPY . .
