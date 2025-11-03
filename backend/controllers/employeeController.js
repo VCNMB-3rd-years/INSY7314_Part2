@@ -104,6 +104,7 @@ const loginEmployee = async (req, res) => {
 //This can be done by all admins 
 const viewAllEmployees = async (req, res) => {
 try {
+    //GeeksForGeeks, 2025
         const employees = await Employee.find().select('-password');
         return res.status(200).json(employees);
     } catch (error) {
@@ -111,8 +112,6 @@ try {
     }
 }
 
-//https://www.geeksforgeeks.org/node-js/rest-api-using-the-express-to-perform-crud-create-read-update-delete/
-//https://www.geeksforgeeks.org/mongodb/mongoose-findbyidanddelete-function/
 
 //added so long, still need a button to connect to, maybe on portal and make payment screens?
 const logoutEmployee = async(req, res) => {
@@ -141,3 +140,14 @@ module.exports = {
     logoutEmployee,
     viewAllEmployees
 }
+
+
+/*References
+==================
+Csarmiento. 8 April 2022. How to get HTTP-only cookie in React? [Online]. Avaialble at: <https://stackoverflow.com/questions/68970499/how-to-get-http-only-cookie-in-react> [Accessed 9 October 2025]
+GeeksForGeeks, 2025. REST API CRUD Operations Using ExpressJS. [Online]. Avaialble at: https://www.geeksforgeeks.org/node-js/rest-api-using-the-express-to-perform-crud-create-read-update-delete/
+GeeksForGeeks, 2025b. findByIdAndDelete Method in Mongoose. [Online]. Avaialble at: https://www.geeksforgeeks.org/mongodb/mongoose-findbyidanddelete-function/
+Ghorbanian, A and Postal, C. 22 September 2022. How To Secure React Applications Against XSS Attacks with HTTP-Only Cookies. [Online]. Available at: <https://www.digitalocean.com/community/tutorials/how-to-secure-react-applications-against-xss-attacks-with-http-only-cookies> [Accessed 9 October 2025]
+    
+
+*/
