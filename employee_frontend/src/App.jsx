@@ -16,6 +16,7 @@ function App() {
       <Navbar/>
         <div className="page-container">
       <Routes>
+        {/* (rudderz243, 2025) Protected routes */}
         <Route path="/" element={<WelcomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={ <ProtectedRoute> <RegisterEmployee /> </ProtectedRoute>} />
@@ -30,3 +31,12 @@ function App() {
 }
 
 export default App
+
+
+
+/*References
+===============
+rudderz243, 2025. library_api. [Online]. Available at: https://github.com/rudderz243/library_api/blob/main/frontend/src/App.jsx 
+
+
+*/

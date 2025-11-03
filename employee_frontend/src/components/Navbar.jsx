@@ -72,6 +72,7 @@ export default function Navbar() {
 /*
 REFERENCES
 ===================
+Stack Overflow, 2024. Creating Navigation in React: Linking Navbar Login Button to Login Page  [Online]. Avaliable at https://stackoverflow.com/questions/77745067/creating-navigation-in-react-linking-navbar-login-button-to-login-page
 W3schools, 2025. JavaScript Comparison.  [Online]. Avaliable at: https://www.w3schools.com/js/js_comparisons.asp
 Web Dev Simplified, 2022. How To Create A Navbar In React With Routing. [video online]. Avaliable at: https://www.youtube.com/watch?v=SLfhMt5OUPI [Accessed 8 October 2025]
 

@@ -21,6 +21,7 @@ export default function EmployeeLogin() {
     setError('');
   };
 
+  //GeeksforGeeks, 2025.
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleSubmit = async (e) => {
@@ -80,13 +81,15 @@ export default function EmployeeLogin() {
     setError('');
   };
 
+
+  // DotNet Full Stack Dev, 2024.
   return (
     <div style={{ textAlign: 'center', marginTop: '20px' }}>
       <h1>Login</h1>
       <div>
         <h3>Please enter your credentials</h3>
         {error && <p className="error-message">{error}</p>}
-
+{/*(Marmelab, 2025) customize the login form fields */}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username</label>
@@ -129,3 +132,14 @@ export default function EmployeeLogin() {
     </div>
   );
 }
+
+
+
+/*
+REFERENCES
+=================
+ DotNet Full Stack Dev, 2024. Role-Based Authorization and Authentication in React with Auth Handlers — Specific role-based and anonymous auth pages. [Online]. Available at: https://dotnetfullstackdev.medium.com/role-based-authorization-and-authentication-in-react-with-auth-handlers-specific-role-based-and-466c4483a2fb [Accessed 3 November 2025]
+ GeeksforGeeks, 2025. How to Show and Hide Password in React Native ? [Online] Available at: https://www.geeksforgeeks.org/react-native/how-to-show-and-hide-password-in-react-native/ [Accessed 09 October 2025] 
+ Marmelab, 2025. Auth Provider Setup. [Online]. Available at:  https://marmelab.com/react-admin/Authentication.html#customizing-the-login-component
+
+*/

@@ -43,6 +43,7 @@ export function AuthProvider({children}) { //any child object this method has to
         loadUser();
     }, []);
 
+    //Manage user authentication state and provide authentication methods  (DotNet Full Stack Dev, 2024)
     const login = async (newToken, role, isSuper) => { 
         setIsAuthenticated(true) //(Bajgain, 2025)
         setToken(newToken) //set the value of the token with the new passed in token (Bajgain, 2025)
@@ -89,5 +90,6 @@ export const useAuth = () => useContext(AuthContext) //whenever useAuth is calle
 /* REFERENCES
     Arya, S. 28 May 2023. JWT Authentication in React with react-router. [Online]. Avaialable at: <https://dev.to/sanjayttg/jwt-authentication-in-react-with-react-router-1d03> [Accessed 9 October 2025]
     Bajgain, D. 2 January 2025. JWT Authentication and Authorization in React. [Online]. Available at: <https://towardsdev.com/jwt-authentication-and-authorization-in-react-254066a738eb> [Accessed 9 October 2025]
+    DotNet Full Stack Dev, 2024. Role-Based Authorization and Authentication in React with Auth Handlers — Specific role-based and anonymous auth pages. [Online]. Available at: https://dotnetfullstackdev.medium.com/role-based-authorization-and-authentication-in-react-with-auth-handlers-specific-role-based-and-466c4483a2fb [Accessed 3 November 2025]
 
 */
