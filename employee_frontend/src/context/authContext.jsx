@@ -24,6 +24,8 @@ export function AuthProvider({children}) { //any child object this method has to
     const [isAuthenticated, setIsAuthenticated] = useState(false) //boolean variable tracking if user was authenticated and logged in (Bajgain, 2025)
     const [isLoading, setIsLoading] = useState(true); //for checking for valid tokens
     const [token, setToken] = useState(null) //start it as empty
+    const [userRole, setUserRole] = useState(null);
+    const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
     useEffect(() => { 
         const loadUser = async () => {
@@ -41,9 +43,11 @@ export function AuthProvider({children}) { //any child object this method has to
         loadUser();
     }, []);
 
-    const login = async (newToken) => { 
+    const login = async (newToken, role, isSuper) => { 
         setIsAuthenticated(true) //(Bajgain, 2025)
         setToken(newToken) //set the value of the token with the new passed in token (Bajgain, 2025)
+        setUserRole(role);
+        setIsSuperAdmin(isSuper);
     }
     
     const logout = async () => {
@@ -51,11 +55,15 @@ export function AuthProvider({children}) { //any child object this method has to
            await api.post('/employee/logout');
            setIsAuthenticated(false); //(Bajgain, 2025)
            setToken(null); //(Bajgain, 2025)
+           setUserRole(null);
+           setIsSuperAdmin(false);
 
            console.log("Logout was successful and session has been cleared!");
         } catch (error) {
             setIsAuthenticated(false); //(Bajgain, 2025)
            setToken(null); //(Bajgain, 2025)
+           setUserRole(null);
+           setIsSuperAdmin(false);
             console.error("Logout failed:", error.message);
         }
     }
@@ -70,7 +78,7 @@ export function AuthProvider({children}) { //any child object this method has to
 
     return (
         //providing ino from this context to the rest of the app to check status anywhere as needed with handling login and logout on the pages //(Arya, 2023)
-        <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}> 
+        <AuthContext.Provider value={{ isAuthenticated, token, login, logout, isSuperAdmin, userRole }}> 
             {children}
         </AuthContext.Provider>
     )

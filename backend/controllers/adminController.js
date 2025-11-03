@@ -90,7 +90,7 @@ const loginAdmin = async (req, res) => {
         // (Gyawali, 2024)
         const safeAdmin = adminData.toObject ? adminData.toObject() : adminData;
         delete safeAdmin.password;
-        delete safeAdmin.privilege;
+        //delete safeAdmin.privilege;
 
         const token = generateJwt({
             id: adminData._id,
