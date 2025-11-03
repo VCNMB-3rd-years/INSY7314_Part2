@@ -22,7 +22,7 @@ function App() {
         <Route path="/paymentPortal" element={<ProtectedRoute> <PaymentPortal /> </ProtectedRoute>} />
         <Route path="/paymentHistory" element={ <ProtectedRoute> <PaymentHistory /> </ProtectedRoute>} />
         <Route path="/permissionDenied" element={<PermissionDenied/>} />
-        <Route path="/allEmployees" element={<AllEmployees />} />
+        <Route path="/allEmployees" element={ <ProtectedRoute> <AllEmployees /> </ProtectedRoute>} />
       </Routes> 
       </div>  
     </Router>

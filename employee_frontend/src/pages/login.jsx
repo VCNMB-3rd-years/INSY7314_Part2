@@ -38,7 +38,7 @@ export default function EmployeeLogin() {
       });
 
       const { token, admin } = adminRes.data;
-      login(token);                       // store JWT
+      login(token, 'admin', admin.privilege);                       // store JWT
       console.log('Admin login success:', admin);
 
       navigate('/allEmployees');
@@ -60,7 +60,7 @@ export default function EmployeeLogin() {
       });
 
       const { token } = empRes.data;
-      login(token);
+      login(token, employee, false);
       console.log('Employee login success');
 
       navigate('/paymentPortal');

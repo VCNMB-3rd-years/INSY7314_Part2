@@ -27,7 +27,7 @@ console.log('Navbar mounted'); //Log purposes
 
 //Method comes from youtube video (Web Dev Simplified, 2022)
 export default function Navbar() {
-   const { isAuthenticated, logout } = useAuth();
+   const { isAuthenticated, userRole, logout, isSuperAdmin } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -39,16 +39,31 @@ export default function Navbar() {
     <nav className="nav">
       <Link to="/" className="site-title">PayNow</Link>
       <ul>
-        {isAuthenticated ? (
+       {isAuthenticated ? (
+          <>
+            <CustomLink to="/paymentPortal">Payment Portal</CustomLink>
+            <CustomLink to="/paymentHistory">Payment History</CustomLink>
+          {userRole === 'admin' && (
+            <CustomLink to="/allEmployees">All Employees</CustomLink>
+            
+          )}
+
+          {isSuperAdmin && (
+            <CustomLink to="/register">Register Employees</CustomLink>
+            
+          )}
+          
+          
+          
           <li className="nav-item">
             <button onClick={handleLogout} className="logout-button">Logout</button>
           </li>
-        ) : (
-          <>
-        <CustomLink to="/register">Register</CustomLink>
-        <CustomLink to="/login">Login</CustomLink>
-         </>         
-)}
+          </>
+       ):(
+        <>
+          <CustomLink to="/login">Login</CustomLink>
+        </>
+       )}
       </ul>
     </nav>
   );
@@ -57,6 +72,7 @@ export default function Navbar() {
 /*
 REFERENCES
 ===================
+W3schools, 2025. JavaScript Comparison.  [Online]. Avaliable at: https://www.w3schools.com/js/js_comparisons.asp
 Web Dev Simplified, 2022. How To Create A Navbar In React With Routing. [video online]. Avaliable at: https://www.youtube.com/watch?v=SLfhMt5OUPI [Accessed 8 October 2025]
 
 */
