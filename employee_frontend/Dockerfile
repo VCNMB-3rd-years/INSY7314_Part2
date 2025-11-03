@@ -17,8 +17,8 @@ COPY ./certs/localhost+1-key.pem ./certs/
 # copy ander goed
 COPY . .
 
-# expose a port (default for vite is 5173)
-EXPOSE 5173
+# expose a port (default for vite is 5173 but other frotnedn is there)
+EXPOSE 5174
 
 # run that thing (tell vite to allow connections from places other than localhost)
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
