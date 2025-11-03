@@ -4,7 +4,7 @@ Welcome to payNow, Payment Portals that enable a smooth, secure handoff of payme
 ## Updates to PayNow
 - New Frontend
   - Employees and Customers are separated into 2 separate frontends still communicating with the same backend.
-  _ Admins are a newly introduced user role.
+  - Admins are a newly introduced user role.
 
 ## Quick map
 
