@@ -7,7 +7,7 @@ const rateLimit = require('express-rate-limit');
 // Set up rate limiter: maximum of 10 requests per 3 minutes per IP this is for testing the low time
 const limiter = rateLimit({
 	windowMs: 3 * 60 * 1000,
-	max: 100,
+	max: 2000,
 	message: "Too many requests from this IP, please try again after 3 minutes",
 }); // Frontend Highlights, 2024
 
