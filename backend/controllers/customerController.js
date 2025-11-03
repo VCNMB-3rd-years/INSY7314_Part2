@@ -1,5 +1,5 @@
 const customer = require('../models/customerModel.js')
-const generateJwt = require('../controllers/authController.js')
+const { generateJwt } = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const { invalidateToken } = require('../middleware/authMiddleware.js')

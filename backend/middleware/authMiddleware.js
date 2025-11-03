@@ -57,7 +57,7 @@ const isAdmin = (req, res, next) => {
 
 
 const isSuperAdmin = (req, res, next) => {
-    if (req.user && req.user.role == 'admin' && req.user.payload.privilege == true) {
+    if (req.user && req.user.role == 'admin' && req.user.payload.privilege === true) {
         next();
     } else {
         res.status(403).json({ message: "Forbidden: Super Admin access required." });

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { registerEmployee } from '../services/apiService.js'
+import { registerEmployee, getCurrentAdmin } from '../services/apiService.js'
 import { getPendingPayments } from '../services/apiService.js'
 import { useNavigate } from 'react-router-dom';
 import '../App.css'
@@ -15,29 +15,30 @@ export default function RegisterEmployee() {
     })
 
     useEffect(() => {
-        const verifyAccess = async () => {
-            try {
-                const res = await getPendingPayments(); //return payload and role
-                console.log("API response:", res);
-                const role = res.data?.payload?.role || res.payload?.role;
-                const privilege = res.data?.payload?.privilege || res.payload?.privilege;
+    const verifyAccess = async () => {
+        try {
+            const res = await getCurrentAdmin(); 
+            console.log("API response:", res);
+            const role = res.data?.role;
+            const privilege = res.data?.payload?.privilege; 
 
-                if (role !== 'admin' || privilege !== true) {
-                    navigate('/permissionDenied');
-                }
-            } catch (error) {
-                console.error("Something went wrong verifying access:", error);
-
-                if (error.response?.status === 401 || error.response?.data?.message === "Only admin has access to this function") {
-                    navigate('/permissionDenied');
-                } else {
-                    navigate('/permissionDenied');
-                }
+            console.log(`Extracted role: ${role}, extracted privilege: ${privilege}`);
+            if (role !== 'admin' || privilege !== true) {
+                navigate('/permissionDenied');
             }
-        };
+        } catch (error) {
+            console.error("Something went wrong verifying access:", error);
 
-        verifyAccess();
-    }, [navigate]);
+            if (error.response && (error.response.status === 401 || error.response.data?.message === "Only admin has access to this function")) {
+                navigate('/permissionDenied');
+            } else {
+                navigate('/permissionDenied');
+            }
+        }
+    };
+
+    verifyAccess();
+}, [navigate]);
 
     const handleInputChange = (e) => {
         setError('');

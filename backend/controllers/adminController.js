@@ -1,6 +1,6 @@
 const Admin = require('../models/adminModel.js')
 const Employee = require('../models/employeeModel.js')
-const generateJwt = require('../controllers/authController.js')
+const { generateJwt } = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const { invalidateToken } = require('../middleware/authMiddleware.js')
@@ -114,8 +114,6 @@ const loginAdmin = async (req, res) => {
     }
 }
 
-
-
 //added so long, still need a button to connect to, maybe on portal and make payment screens?
 const logout = async(req, res) => {
     //const authHeader = req.headers['authorization'] //strip header for token value
@@ -167,11 +165,25 @@ const deleteEmployee = async (req, res) => {
     }
 };
 
+//gets admin details to know who it is
+const loggedAdmin = async (req, res) => {
+    try {
+        return res.status(200).json({
+            role: req.user.role,
+            payload: req.user.payload
+        });
+    } catch (error) {
+        console.error('Get admin info error:', error);
+        return res.status(500).json({ message: "Server error getting admin data" });
+    }
+}
+
 module.exports = {
     registerAdmin,
     loginAdmin,
     logout,
-    deleteEmployee
+    deleteEmployee,
+    loggedAdmin
 }
 
 

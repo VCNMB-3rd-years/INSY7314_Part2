@@ -15,4 +15,18 @@ const generateJwt = (payload, role) => {
     })
 }
 
-module.exports = generateJwt
+const getCurrentUser = async (req, res) => {
+  try {
+    //req.user is attached by verifyToken middleware
+    
+    res.json({
+      role: req.user.role,
+      payload: req.user.payload || {}
+    });
+  } catch (err) {
+    console.error('getCurrentUser error', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { generateJwt, getCurrentUser }

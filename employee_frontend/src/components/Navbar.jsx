@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useMatch, useResolvedPath, useNavigate} from "react-router-dom";
 import { useAuth } from '../context/authContext.jsx'
-
+import { getCurrentAdmin } from '../services/apiService.js';
 
 //calling the logout fuction from the class: Authcontext
 

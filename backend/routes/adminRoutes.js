@@ -2,7 +2,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const { verifyToken, isAdmin, isSuperAdmin } = require('../middleware/authMiddleware.js')
 const ExpressBrute = require('express-brute');
-const { registerAdmin, loginAdmin, logout, deleteEmployee } = require('../controllers/adminController.js'); // Import deleteEmployee
+const { registerAdmin, loginAdmin, logout, deleteEmployee, loggedAdmin } = require('../controllers/adminController.js'); // Import deleteEmployee
 const { registerEmployee } = require('../controllers/employeeController.js'); // Import deleteEmployee
 
 // Set up rate limiter: maximum of 10 requests per 3 minutes per IP
@@ -52,5 +52,6 @@ router.post('/registerAdmin', verifyToken, isSuperAdmin, registerEmployee);
 router.post('/login', loginAdmin);
 router.post('/logout', logout);
 router.delete('/deleteEmployee', verifyToken, deleteEmployee);
+router.get('/current', verifyToken, isAdmin, loggedAdmin);
 
 module.exports = router;

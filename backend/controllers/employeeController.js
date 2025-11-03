@@ -1,5 +1,5 @@
 const Employee = require('../models/employeeModel.js')
-const generateJwt = require('../controllers/authController.js')
+const { generateJwt } = require('../controllers/authController.js')
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
 const { invalidateToken } = require('../middleware/authMiddleware.js')
@@ -8,7 +8,7 @@ const { invalidateToken } = require('../middleware/authMiddleware.js')
 const registerEmployee = async (req, res) => {
     //Information needed for registration
     try {
-        if (req.user.role !== 'admin' && req.user.privilege !== true) { //only main admin has access to this
+        if (req.user.role !== 'admin' || req.user.payload.privilege !== true) {//only main admin has access to this
             return res.status(401).json({message: "Only one admin has access to this function"})
         }
 

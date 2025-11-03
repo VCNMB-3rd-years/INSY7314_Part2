@@ -9,3 +9,5 @@ export const loginAdmin = (admin) => api.post('/admin/login', admin);
 export const loginEmployee = (employee) => api.post('/employee/loginEmployee', employee)
 export const getAllEmployees = () => api.get('/employee/viewAllEmployees')
 export const deleteEmployeeApi = (username) => api.delete('/admin/deleteEmployee', { data: { username } })
+export const getCurrentAdmin = () => api.get('/admin/current')
+export const getCurrentUser = () => api.get('/auth/current')
