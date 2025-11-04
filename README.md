@@ -6,6 +6,11 @@ Welcome to payNow, Payment Portals that enable a smooth, secure handoff of payme
   - Employees and Customers are separated into 2 separate frontends still communicating with the same backend.
   - Admins are a newly introduced user role.
 
+## Video of the Website
+
+### Full Demo:
+Link: https://youtu.be/-cv2imDU6cY
+
 ## Quick map
 
 - Customer frontend: [customer_frontend/src](customer_frontend/src) — UI for customers and the customer-facing SPA
@@ -120,17 +125,6 @@ For any code-level questions about a particular file or symbol above, open the f
 
 ---
 
-
-## Videos of the Website
-
-### Customer Side:
-Link: https://youtu.be/X78mEi2oRfY
-
-### Employee Side:
-Link: https://youtu.be/WRk0WtzKrOc
-
-### Testing of Tokens
-Link: https://youtu.be/47AGMXM_2ws
 
 ## Images of the Testing
 
