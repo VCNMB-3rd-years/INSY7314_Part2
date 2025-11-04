@@ -8,8 +8,8 @@ Welcome to payNow, Payment Portals that enable a smooth, secure handoff of payme
 
 ## Video of the Website
 
-### Full Demo:
-Link: https://youtu.be/-cv2imDU6cY
+- Full Demo:
+  - Link: https://youtu.be/-cv2imDU6cY
 
 ## Quick map
 
