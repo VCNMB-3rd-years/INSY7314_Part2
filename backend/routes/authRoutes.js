@@ -4,6 +4,6 @@ const { getCurrentUser } = require('../controllers/authController');
 
 const router = express.Router();
 
-router.get('/current', verifyToken, getCurrentUser);   // <-- the new endpoint
+router.get('/current', verifyToken, getCurrentUser);  
 
 module.exports = router;

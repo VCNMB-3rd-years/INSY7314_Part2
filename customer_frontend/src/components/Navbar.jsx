@@ -40,15 +40,22 @@ export default function Navbar() {
       <Link to="/" className="site-title">PayNow</Link>
       <ul>
         {isAuthenticated ? (
-          <li className="nav-item">
-            <button onClick={handleLogout} className="logout-button">Logout</button>
-          </li>
+          <>
+            <CustomLink to="/customerPayments">Payment Portal</CustomLink>
+            <CustomLink to="/makePayment">Create Payment</CustomLink>
+
+            <li>
+              <button onClick={handleLogout} className="logout-button">
+                Logout
+              </button>
+            </li>
+          </>
         ) : (
           <>
-        <CustomLink to="/register">Register</CustomLink>
-        <CustomLink to="/login">Login</CustomLink>
-         </>         
-)}
+            <CustomLink to="/register">Register</CustomLink>
+            <CustomLink to="/login">Login</CustomLink>
+          </>
+        )}
       </ul>
     </nav>
   );

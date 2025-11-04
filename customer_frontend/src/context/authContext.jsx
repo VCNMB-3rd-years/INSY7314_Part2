@@ -2,6 +2,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { setAuthToken, api } from '../interfaces/axiosInstance.js'
+import { getCurrentUser } from '../services/apiService.js';
 
 //create the section of memory first for remembering if user is logged in
 const AuthContext = createContext()
@@ -9,8 +10,8 @@ const AuthContext = createContext()
 //check if the user's token in HTTP only cookie is valid
 const checkAuthStatus = async () => {
     try {
-        //using protected route to test if valid token is stored
-        await api.get('/payments');
+        //using protected customer route to test if valid token is stored
+        await api.get('/payments/customer');
 
         //if request has status 200 for success, token was valid
         return true;
@@ -27,19 +28,21 @@ export function AuthProvider({ children }) { //any child object this method has 
 
     useEffect(() => {
         const loadUser = async () => {
-            const status = await checkAuthStatus();
-
-            if (status) { //if valid token
-                setIsAuthenticated(true); //authenticate user
-            } else {
-                await logout(); //else logout
+            try {
+                //trying a protected route that any user can hit
+                await api.get('/payments/customer');
+            } catch (e1) {
+                // not logged in at all
+                setIsLoading(false);
+                return;
             }
 
-            setIsLoading(false); // stop loading after check
-        };
+            const res = await getCurrentUser();
 
-        loadUser();
-    }, []);
+            setIsAuthenticated(true);
+        }
+        loadUser().finally(() => setIsLoading(false));
+    }, [])
 
     const login = async (newToken) => {
         setIsAuthenticated(true) //(Bajgain, 2025)
